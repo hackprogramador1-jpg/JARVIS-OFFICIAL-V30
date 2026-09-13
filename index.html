@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <meta name="theme-color" content="#020608">
+
 <title>JARVIS — Official V1</title>
 
 <style>
@@ -26,6 +27,10 @@ body{
   position:relative;
 }
 
+button{
+  font-family:inherit;
+}
+
 #space{
   position:fixed;
   inset:0;
@@ -38,9 +43,11 @@ body{
   position:fixed;
   inset:0;
   background:
-    radial-gradient(circle at center,
+    radial-gradient(
+      circle at center,
       rgba(0,220,255,.08),
-      transparent 30%),
+      transparent 30%
+    ),
     linear-gradient(
       rgba(0,20,25,.15),
       rgba(0,0,0,.55)
@@ -55,13 +62,19 @@ body{
   left:0;
   right:0;
   height:74px;
+
   display:flex;
   align-items:center;
   justify-content:space-between;
+
   padding:0 22px;
+
   z-index:5;
+
   border-bottom:1px solid rgba(0,220,255,.13);
+
   background:rgba(0,8,12,.35);
+
   backdrop-filter:blur(10px);
 }
 
@@ -75,6 +88,7 @@ body{
   display:flex;
   align-items:center;
   gap:8px;
+
   font-size:10px;
   letter-spacing:2px;
 }
@@ -83,31 +97,48 @@ body{
   width:8px;
   height:8px;
   border-radius:50%;
+
   background:#00eaff;
-  box-shadow:0 0 14px #00eaff;
+
+  box-shadow:
+    0 0 14px #00eaff;
 }
 
 #state{
   position:fixed;
+
   top:91px;
   left:50%;
+
   transform:translateX(-50%);
+
   z-index:5;
+
   font-size:11px;
   letter-spacing:4px;
+
   opacity:.72;
+
   text-align:center;
+
   white-space:nowrap;
+
+  transition:.25s;
 }
 
 #core{
   position:fixed;
+
   left:50%;
   top:50%;
+
   transform:translate(-50%,-50%);
+
   width:min(78vw,420px);
   height:min(78vw,420px);
+
   z-index:3;
+
   pointer-events:none;
 }
 
@@ -118,83 +149,124 @@ body{
 
 .coreRing{
   position:absolute;
+
   inset:10%;
-  border:1px solid rgba(0,225,255,.16);
+
+  border:
+    1px solid
+    rgba(0,225,255,.16);
+
   border-radius:50%;
-  animation:rotate 18s linear infinite;
+
+  animation:
+    rotate 18s linear infinite;
 }
 
 .coreRing:nth-child(2){
   inset:18%;
+
   animation-duration:12s;
   animation-direction:reverse;
 }
 
 .coreRing:nth-child(3){
   inset:27%;
+
   animation-duration:8s;
 }
 
 @keyframes rotate{
-  to{transform:rotate(360deg)}
+  to{
+    transform:rotate(360deg);
+  }
 }
 
 #brainLabel{
   position:absolute;
+
   left:50%;
   top:50%;
+
   transform:translate(-50%,-50%);
+
   text-align:center;
+
   pointer-events:none;
 }
 
 #brainLabel strong{
   display:block;
+
   font-size:12px;
   letter-spacing:5px;
 }
 
 #brainLabel span{
   display:block;
+
   margin-top:8px;
+
   font-size:8px;
   letter-spacing:3px;
+
   opacity:.5;
 }
 
 .bottom{
   position:fixed;
+
   left:0;
   right:0;
   bottom:0;
+
   min-height:82px;
+
   z-index:6;
+
   display:flex;
   align-items:center;
   justify-content:center;
+
   gap:10px;
+
   padding:12px 18px;
-  background:linear-gradient(
-    transparent,
-    rgba(0,5,8,.92)
-  );
+
+  background:
+    linear-gradient(
+      transparent,
+      rgba(0,5,8,.92)
+    );
 }
 
 .control{
-  border:1px solid rgba(0,225,255,.25);
-  background:rgba(0,25,31,.5);
+  border:
+    1px solid
+    rgba(0,225,255,.25);
+
+  background:
+    rgba(0,25,31,.5);
+
   color:#bffaff;
+
   border-radius:12px;
+
   padding:10px 15px;
+
   font-size:10px;
+
   letter-spacing:2px;
+
   cursor:pointer;
+
   transition:.2s;
 }
 
 .control:hover{
   border-color:#00eaff;
-  box-shadow:0 0 18px rgba(0,220,255,.18);
+
+  box-shadow:
+    0 0 18px
+    rgba(0,220,255,.18);
 }
 
 .control:active{
@@ -203,105 +275,172 @@ body{
 
 #permission{
   position:fixed;
+
   inset:0;
+
   z-index:20;
+
   display:flex;
+
   align-items:center;
   justify-content:center;
+
   padding:25px;
-  background:rgba(0,4,7,.96);
+
+  background:
+    rgba(0,4,7,.96);
 }
 
 .permissionBox{
   width:min(430px,100%);
-  border:1px solid rgba(0,225,255,.3);
+
+  border:
+    1px solid
+    rgba(0,225,255,.3);
+
   border-radius:18px;
+
   padding:28px;
+
   text-align:center;
-  background:rgba(0,18,24,.88);
-  box-shadow:0 0 50px rgba(0,200,255,.08);
+
+  background:
+    rgba(0,18,24,.88);
+
+  box-shadow:
+    0 0 50px
+    rgba(0,200,255,.08);
 }
 
 .permissionBox h1{
   font-size:19px;
+
   letter-spacing:5px;
+
   margin-bottom:15px;
 }
 
 .permissionBox p{
   font-size:12px;
+
   line-height:1.7;
+
   opacity:.7;
+
   margin-bottom:24px;
 }
 
 #start{
   width:100%;
+
   padding:15px;
+
   border-radius:12px;
-  border:1px solid #00eaff;
-  background:rgba(0,220,255,.08);
+
+  border:
+    1px solid
+    #00eaff;
+
+  background:
+    rgba(0,220,255,.08);
+
   color:#dffcff;
+
   font-weight:bold;
+
   letter-spacing:3px;
+
   cursor:pointer;
 }
 
 #brainPanel{
   position:fixed;
+
   inset:0;
+
   z-index:15;
+
   display:none;
+
   overflow:auto;
+
   padding:90px 18px 110px;
+
   background:
-    radial-gradient(circle at center top,
+    radial-gradient(
+      circle at center top,
       rgba(0,220,255,.08),
-      transparent 35%),
+      transparent 35%
+    ),
     rgba(1,7,10,.97);
 }
 
 .panelHeader{
   display:flex;
+
   align-items:center;
   justify-content:space-between;
+
   margin-bottom:25px;
 }
 
 .panelHeader h2{
   font-size:18px;
+
   letter-spacing:4px;
 }
 
 .close{
-  border:1px solid rgba(0,225,255,.3);
+  border:
+    1px solid
+    rgba(0,225,255,.3);
+
   background:transparent;
+
   color:#d9fbff;
+
   padding:9px 13px;
+
   border-radius:9px;
+
   cursor:pointer;
 }
 
 .stats{
   display:grid;
-  grid-template-columns:repeat(2,1fr);
+
+  grid-template-columns:
+    repeat(2,1fr);
+
   gap:10px;
+
   max-width:700px;
+
   margin:auto;
 }
 
 .stat{
-  border:1px solid rgba(0,225,255,.14);
-  background:rgba(0,25,31,.4);
+  border:
+    1px solid
+    rgba(0,225,255,.14);
+
+  background:
+    rgba(0,25,31,.4);
+
   border-radius:14px;
+
   padding:17px;
 }
 
 .stat small{
   display:block;
+
   font-size:8px;
+
   letter-spacing:2px;
+
   opacity:.5;
+
   margin-bottom:8px;
 }
 
@@ -311,68 +450,156 @@ body{
 
 .knowledge{
   max-width:700px;
+
   margin:25px auto 0;
 }
 
 .knowledge h3{
   font-size:10px;
+
   letter-spacing:3px;
+
   margin-bottom:12px;
 }
 
 .item{
   display:flex;
+
   align-items:center;
+
   gap:10px;
+
   padding:12px;
-  border-bottom:1px solid rgba(255,255,255,.05);
+
+  border-bottom:
+    1px solid
+    rgba(255,255,255,.05);
+
   font-size:11px;
 }
 
 .color{
   width:9px;
   height:9px;
+
   border-radius:50%;
+
+  flex-shrink:0;
 }
 
 .green{
   background:#38ff9b;
-  box-shadow:0 0 10px #38ff9b;
+
+  box-shadow:
+    0 0 10px
+    #38ff9b;
 }
 
 .blue{
   background:#38bfff;
-  box-shadow:0 0 10px #38bfff;
+
+  box-shadow:
+    0 0 10px
+    #38bfff;
 }
 
 .red{
   background:#ff466a;
-  box-shadow:0 0 10px #ff466a;
+
+  box-shadow:
+    0 0 10px
+    #ff466a;
 }
 
 .purple{
   background:#c06cff;
-  box-shadow:0 0 10px #c06cff;
+
+  box-shadow:
+    0 0 10px
+    #c06cff;
+}
+
+.yellow{
+  background:#ffe45c;
+
+  box-shadow:
+    0 0 10px
+    #ffe45c;
+}
+
+.brainLists{
+  max-width:700px;
+
+  margin:28px auto;
+}
+
+.brainLists h3{
+  font-size:10px;
+
+  letter-spacing:3px;
+
+  margin:20px 0 10px;
+}
+
+.brainList{
+  border:
+    1px solid
+    rgba(0,225,255,.08);
+
+  border-radius:12px;
+
+  overflow:hidden;
+}
+
+.brainEntry{
+  padding:12px;
+
+  font-size:10px;
+
+  border-bottom:
+    1px solid
+    rgba(255,255,255,.04);
+
+  line-height:1.5;
+}
+
+.brainEntry:last-child{
+  border-bottom:0;
+}
+
+.empty{
+  opacity:.45;
+
+  padding:15px;
+
+  font-size:10px;
 }
 
 #internal{
   position:fixed;
+
   left:-99999px;
   top:-99999px;
+
   width:1px;
   height:1px;
+
   opacity:0;
+
   pointer-events:none;
 }
 
 @media(max-width:600px){
+
   .top{
     height:62px;
+
     padding:0 15px;
   }
 
   #state{
     top:76px;
+
     font-size:9px;
   }
 
@@ -383,17 +610,21 @@ body{
 
   .bottom{
     min-height:72px;
+
     gap:6px;
+
     padding:8px;
   }
 
   .control{
     padding:9px 10px;
+
     font-size:8px;
   }
 
   .stats{
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:
+      repeat(2,1fr);
   }
 }
 </style>
@@ -406,15 +637,26 @@ body{
 <div class="overlay"></div>
 
 <header class="top">
-  <div class="brand">JARVIS</div>
+
+  <div class="brand">
+    JARVIS
+  </div>
 
   <div class="status">
+
     <span class="dot"></span>
-    <span id="connection">ONLINE</span>
+
+    <span id="connection">
+      ONLINE
+    </span>
+
   </div>
+
 </header>
 
-<div id="state">AGUARDANDO INICIALIZAÇÃO</div>
+<div id="state">
+  AGUARDANDO INICIALIZAÇÃO
+</div>
 
 <section id="core">
 
@@ -425,24 +667,43 @@ body{
   <div class="coreRing"></div>
 
   <div id="brainLabel">
-    <strong>JARVIS</strong>
-    <span>CORE ACTIVE</span>
+
+    <strong>
+      JARVIS
+    </strong>
+
+    <span>
+      CORE ACTIVE
+    </span>
+
   </div>
 
 </section>
 
 <div class="bottom">
 
-  <button class="control" id="brainButton">
+  <button
+    class="control"
+    id="brainButton">
+
     CÉREBRO
+
   </button>
 
-  <button class="control" id="statusButton">
+  <button
+    class="control"
+    id="statusButton">
+
     STATUS
+
   </button>
 
-  <button class="control" id="timeButton">
+  <button
+    class="control"
+    id="timeButton">
+
     HORA
+
   </button>
 
 </div>
@@ -451,7 +712,9 @@ body{
 
   <div class="permissionBox">
 
-    <h1>JARVIS</h1>
+    <h1>
+      JARVIS
+    </h1>
 
     <p>
       O sistema precisa de autorização para utilizar
@@ -471,10 +734,16 @@ body{
 
   <div class="panelHeader">
 
-    <h2>CÉREBRO JARVIS</h2>
+    <h2>
+      CÉREBRO JARVIS
+    </h2>
 
-    <button class="close" id="closeBrain">
+    <button
+      class="close"
+      id="closeBrain">
+
       FECHAR
+
     </button>
 
   </div>
@@ -497,7 +766,7 @@ body{
     </div>
 
     <div class="stat">
-      <small>CONHECIMENTOS</small>
+      <small>CONHECIDOS</small>
       <strong id="known">0</strong>
     </div>
 
@@ -507,15 +776,27 @@ body{
     </div>
 
     <div class="stat">
-      <small>NÃO RESOLVIDOS</small>
+      <small>DESCONHECIDOS</small>
       <strong id="unknown">0</strong>
+    </div>
+
+    <div class="stat">
+      <small>EM APRENDIZADO</small>
+      <strong id="learning">0</strong>
+    </div>
+
+    <div class="stat">
+      <small>MEMÓRIAS PESSOAIS</small>
+      <strong id="personal">0</strong>
     </div>
 
   </div>
 
   <div class="knowledge">
 
-    <h3>ESTADO DO CONHECIMENTO</h3>
+    <h3>
+      ESTADO DO CONHECIMENTO
+    </h3>
 
     <div class="item">
       <span class="color green"></span>
@@ -525,6 +806,11 @@ body{
     <div class="item">
       <span class="color blue"></span>
       Informação aprendida
+    </div>
+
+    <div class="item">
+      <span class="color yellow"></span>
+      Informação em aprendizado
     </div>
 
     <div class="item">
@@ -539,77 +825,207 @@ body{
 
   </div>
 
+  <div class="brainLists">
+
+    <h3>
+      CONHECIMENTOS REGISTRADOS
+    </h3>
+
+    <div
+      class="brainList"
+      id="knownList">
+
+      <div class="empty">
+        Nenhum conhecimento registrado ainda.
+      </div>
+
+    </div>
+
+    <h3>
+      APRENDIZADOS
+    </h3>
+
+    <div
+      class="brainList"
+      id="learnedList">
+
+      <div class="empty">
+        Nenhum aprendizado registrado ainda.
+      </div>
+
+    </div>
+
+    <h3>
+      EM APRENDIZADO
+    </h3>
+
+    <div
+      class="brainList"
+      id="learningList">
+
+      <div class="empty">
+        Nenhum assunto em aprendizado.
+      </div>
+
+    </div>
+
+    <h3>
+      DESCONHECIDOS
+    </h3>
+
+    <div
+      class="brainList"
+      id="unknownList">
+
+      <div class="empty">
+        Nenhum assunto desconhecido registrado.
+      </div>
+
+    </div>
+
+    <h3>
+      MEMÓRIA PESSOAL
+    </h3>
+
+    <div
+      class="brainList"
+      id="personalList">
+
+      <div class="empty">
+        Nenhuma memória pessoal registrada.
+      </div>
+
+    </div>
+
+  </div>
+
 </section>
 
 <div id="internal"></div>
 
-<script>
+<script type="module">
+
 /* =========================================================
    JARVIS OFFICIAL V1
-   CORE DE INTERFACE
+   INTERFACE + CÉREBRO
 ========================================================= */
 
-const stateEl = document.getElementById("state");
-const permission = document.getElementById("permission");
-const startButton = document.getElementById("start");
+import {
+  processQuestion,
+  learn,
+  remember,
+  markKnown,
+  markUnknown,
+  getBrainState,
+  getBrainStats,
+  initializeBrain
+} from "./brain/core.js";
 
-const brainPanel = document.getElementById("brainPanel");
-const brainButton = document.getElementById("brainButton");
-const closeBrain = document.getElementById("closeBrain");
+import {
+  askAI
+} from "./brain/ai.js";
 
-const connection = document.getElementById("connection");
+import {
+  getKnowledge
+} from "./brain/knowledge.js";
 
-const sessionsEl = document.getElementById("sessions");
-const questionsEl = document.getElementById("questions");
-const answersEl = document.getElementById("answers");
-const knownEl = document.getElementById("known");
-const learnedEl = document.getElementById("learned");
-const unknownEl = document.getElementById("unknown");
+import {
+  getSessionStats
+} from "./brain/session.js";
+
 
 /* =========================================================
-   MEMÓRIA LOCAL
+   ELEMENTOS
 ========================================================= */
 
-const defaultBrain = {
-  sessions: 0,
-  questions: 0,
-  answers: 0,
-  known: 0,
-  learned: 0,
-  unknown: 0,
-  personal: 0,
-  memories: [],
-  learning: []
-};
+const stateEl =
+  document.getElementById("state");
 
-let brain;
+const permission =
+  document.getElementById("permission");
 
-try {
-  brain = JSON.parse(
-    localStorage.getItem("JARVIS_BRAIN")
-  ) || defaultBrain;
-} catch {
-  brain = defaultBrain;
-}
+const startButton =
+  document.getElementById("start");
 
-function saveBrain(){
-  localStorage.setItem(
-    "JARVIS_BRAIN",
-    JSON.stringify(brain)
+const brainPanel =
+  document.getElementById("brainPanel");
+
+const brainButton =
+  document.getElementById("brainButton");
+
+const closeBrain =
+  document.getElementById("closeBrain");
+
+const connection =
+  document.getElementById("connection");
+
+
+/* =========================================================
+   ESTATÍSTICAS
+========================================================= */
+
+const sessionsEl =
+  document.getElementById("sessions");
+
+const questionsEl =
+  document.getElementById("questions");
+
+const answersEl =
+  document.getElementById("answers");
+
+const knownEl =
+  document.getElementById("known");
+
+const learnedEl =
+  document.getElementById("learned");
+
+const unknownEl =
+  document.getElementById("unknown");
+
+const learningEl =
+  document.getElementById("learning");
+
+const personalEl =
+  document.getElementById("personal");
+
+
+/* =========================================================
+   LISTAS
+========================================================= */
+
+const knownList =
+  document.getElementById("knownList");
+
+const learnedList =
+  document.getElementById("learnedList");
+
+const learningList =
+  document.getElementById("learningList");
+
+const unknownList =
+  document.getElementById("unknownList");
+
+const personalList =
+  document.getElementById("personalList");
+
+
+/* =========================================================
+   CÉREBRO
+========================================================= */
+
+try{
+
+  initializeBrain();
+
+}catch(error){
+
+  console.error(
+    "Erro ao inicializar cérebro:",
+    error
   );
 
-  updateBrainUI();
 }
 
-function updateBrainUI(){
-
-  sessionsEl.textContent = brain.sessions || 0;
-  questionsEl.textContent = brain.questions || 0;
-  answersEl.textContent = brain.answers || 0;
-  knownEl.textContent = brain.known || 0;
-  learnedEl.textContent = brain.learned || 0;
-  unknownEl.textContent = brain.unknown || 0;
-}
 
 /* =========================================================
    VOZ
@@ -620,54 +1036,125 @@ const SpeechRecognition =
   window.webkitSpeechRecognition;
 
 let recognition = null;
+
 let listening = false;
+
 let speaking = false;
+
 let starting = false;
 
 let voices = [];
 
+
+/* =========================================================
+   VOZ DISPONÍVEL
+========================================================= */
+
 function loadVoices(){
-  voices = window.speechSynthesis
-    ? speechSynthesis.getVoices()
-    : [];
+
+  if(
+    "speechSynthesis"
+    in window
+  ){
+
+    voices =
+      speechSynthesis.getVoices();
+
+  }
+
 }
 
 loadVoices();
 
-if ("speechSynthesis" in window){
-  speechSynthesis.onvoiceschanged = loadVoices;
+if(
+  "speechSynthesis"
+  in window
+){
+
+  speechSynthesis.onvoiceschanged =
+    loadVoices;
+
 }
+
+
+/* =========================================================
+   ESCOLHA DE VOZ
+========================================================= */
 
 function chooseVoice(){
 
-  const preferred = [
+  const maleNames = [
+
+    "Daniel",
+    "Antonio",
+    "Felipe",
     "Google português do Brasil",
     "Microsoft Daniel",
     "Microsoft Antonio",
-    "Microsoft Francisca",
-    "pt-BR"
+    "Microsoft George",
+    "Microsoft David",
+    "Alex"
+
   ];
 
-  for (const preference of preferred){
+  for(
+    const name
+    of maleNames
+  ){
 
-    const found = voices.find(v =>
-      v.name.toLowerCase().includes(
-        preference.toLowerCase()
-      )
-    );
+    const found =
+      voices.find(
+        voice =>
+          voice.name
+            .toLowerCase()
+            .includes(
+              name.toLowerCase()
+            )
+      );
 
-    if (found) return found;
+    if(found){
+
+      return found;
+
+    }
+
   }
 
-  return voices.find(v =>
-    v.lang &&
-    v.lang.toLowerCase().startsWith("pt-br")
-  ) || voices[0];
+  const portuguese =
+    voices.find(
+      voice =>
+        voice.lang &&
+        voice.lang
+          .toLowerCase()
+          .startsWith("pt")
+    );
+
+  return portuguese ||
+    voices[0];
+
 }
+
+
+/* =========================================================
+   FALA
+========================================================= */
 
 function speak(text){
 
-  if (!("speechSynthesis" in window)) return;
+  if(
+    !("speechSynthesis"
+      in window)
+  ){
+
+    return;
+
+  }
+
+  if(!text){
+
+    return;
+
+  }
 
   speechSynthesis.cancel();
 
@@ -676,217 +1163,417 @@ function speak(text){
   stopRecognition();
 
   const utterance =
-    new SpeechSynthesisUtterance(text);
+    new SpeechSynthesisUtterance(
+      String(text)
+    );
 
-  const voice = chooseVoice();
+  const voice =
+    chooseVoice();
 
-  if (voice){
-    utterance.voice = voice;
-    utterance.lang = voice.lang || "pt-BR";
-  } else {
-    utterance.lang = "pt-BR";
+  if(voice){
+
+    utterance.voice =
+      voice;
+
+    utterance.lang =
+      voice.lang ||
+      "pt-BR";
+
+  }else{
+
+    utterance.lang =
+      "pt-BR";
+
   }
 
-  utterance.rate = 0.92;
-  utterance.pitch = 0.75;
-  utterance.volume = 1;
+  /*
+    Voz mais grave e controlada.
+    O navegador continua determinando
+    quais vozes estão disponíveis.
+  */
 
-  utterance.onend = () => {
+  utterance.rate =
+    0.91;
 
-    speaking = false;
+  utterance.pitch =
+    0.72;
 
-    setTimeout(() => {
-      startRecognition();
-    }, 400);
-  };
+  utterance.volume =
+    1;
 
-  utterance.onerror = () => {
+  utterance.onend =
+    () => {
 
-    speaking = false;
+      speaking = false;
 
-    setTimeout(() => {
-      startRecognition();
-    }, 400);
-  };
+      stateEl.textContent =
+        "MICROFONE ATIVO • AGUARDANDO JARVIS";
 
-  speechSynthesis.speak(utterance);
+      restartRecognition();
+
+    };
+
+  utterance.onerror =
+    () => {
+
+      speaking = false;
+
+      restartRecognition();
+
+    };
+
+  speechSynthesis.speak(
+    utterance
+  );
+
 }
+
 
 /* =========================================================
    RECONHECIMENTO
 ========================================================= */
 
-if (SpeechRecognition){
+if(SpeechRecognition){
 
-  recognition = new SpeechRecognition();
+  recognition =
+    new SpeechRecognition();
 
-  recognition.lang = "pt-BR";
+  recognition.lang =
+    "pt-BR";
 
-  recognition.continuous = true;
+  recognition.continuous =
+    true;
 
-  recognition.interimResults = false;
+  recognition.interimResults =
+    false;
 
-  recognition.maxAlternatives = 1;
+  recognition.maxAlternatives =
+    1;
 
-  recognition.onstart = () => {
 
-    listening = true;
-    starting = false;
+  recognition.onstart =
+    () => {
 
-    stateEl.textContent =
-      "MICROFONE ATIVO • AGUARDANDO JARVIS";
-  };
+      listening = true;
 
-  recognition.onresult = async event => {
+      starting = false;
 
-    const result =
-      event.results[event.results.length - 1];
-
-    if (!result || !result[0]) return;
-
-    const text =
-      result[0].transcript
-        .trim()
-        .toLowerCase();
-
-    if (!text) return;
-
-    processVoice(text);
-  };
-
-  recognition.onerror = event => {
-
-    listening = false;
-    starting = false;
-
-    if (
-      event.error === "not-allowed" ||
-      event.error === "service-not-allowed"
-    ){
       stateEl.textContent =
-        "MICROFONE NÃO AUTORIZADO";
-      return;
-    }
+        "MICROFONE ATIVO • AGUARDANDO JARVIS";
 
-    restartRecognition();
-  };
+    };
 
-  recognition.onend = () => {
 
-    listening = false;
-    starting = false;
+  recognition.onresult =
+    event => {
 
-    if (!speaking){
+      const result =
+        event.results[
+          event.results.length - 1
+        ];
+
+      if(
+        !result ||
+        !result[0]
+      ){
+
+        return;
+
+      }
+
+      const text =
+        result[0]
+          .transcript
+          .trim()
+          .toLowerCase();
+
+      if(!text){
+
+        return;
+
+      }
+
+      processVoice(
+        text
+      );
+
+    };
+
+
+  recognition.onerror =
+    event => {
+
+      listening = false;
+
+      starting = false;
+
+      if(
+        event.error ===
+          "not-allowed" ||
+        event.error ===
+          "service-not-allowed"
+      ){
+
+        stateEl.textContent =
+          "MICROFONE NÃO AUTORIZADO";
+
+        return;
+
+      }
+
+      /*
+        Sem beep.
+        Apenas tenta recuperar
+        silenciosamente.
+      */
+
       restartRecognition();
-    }
-  };
+
+    };
+
+
+  recognition.onend =
+    () => {
+
+      listening = false;
+
+      starting = false;
+
+      if(!speaking){
+
+        restartRecognition();
+
+      }
+
+    };
 
 }else{
 
   stateEl.textContent =
     "RECONHECIMENTO DE VOZ NÃO DISPONÍVEL";
+
 }
+
+
+/* =========================================================
+   INICIAR MICROFONE
+========================================================= */
 
 function startRecognition(){
 
-  if (!recognition) return;
+  if(!recognition){
 
-  if (speaking) return;
+    return;
 
-  if (listening) return;
+  }
 
-  if (starting) return;
+  if(speaking){
+
+    return;
+
+  }
+
+  if(listening){
+
+    return;
+
+  }
+
+  if(starting){
+
+    return;
+
+  }
 
   starting = true;
 
   try{
+
     recognition.start();
+
   }catch{
+
     starting = false;
+
   }
+
 }
+
+
+/* =========================================================
+   PARAR MICROFONE
+========================================================= */
 
 function stopRecognition(){
 
-  if (!recognition) return;
+  if(!recognition){
+
+    return;
+
+  }
 
   try{
+
     recognition.stop();
+
   }catch{}
 
   listening = false;
+
   starting = false;
+
 }
+
+
+/* =========================================================
+   REINICIAR AUTOMATICAMENTE
+========================================================= */
 
 function restartRecognition(){
 
-  if (speaking) return;
+  if(speaking){
 
-  setTimeout(() => {
-    startRecognition();
-  }, 800);
+    return;
+
+  }
+
+  setTimeout(
+    () => {
+
+      if(
+        !speaking &&
+        !brainPanel.style.display
+      ){
+
+        startRecognition();
+
+      }
+
+    },
+    700
+  );
+
 }
+
 
 /* =========================================================
    PROCESSAMENTO DA VOZ
 ========================================================= */
 
-async function processVoice(text){
-
-  /*
-    O JARVIS só processa comandos destinados a ele.
-  */
+async function processVoice(
+  text
+){
 
   const wakeWords = [
+
     "jarvis",
     "jávis",
     "javis"
+
   ];
 
   const hasWakeWord =
-    wakeWords.some(word =>
-      text.includes(word)
+    wakeWords.some(
+      word =>
+        text.includes(word)
     );
 
-  if (!hasWakeWord) return;
+  /*
+    Ignora conversas que não
+    sejam direcionadas ao JARVIS.
+  */
 
-  const command =
+  if(!hasWakeWord){
+
+    return;
+
+  }
+
+  let command =
     text
       .replace(/jávis/g,"")
       .replace(/javis/g,"")
       .replace(/jarvis/g,"")
       .trim();
 
-  if (!command){
+  if(!command){
 
     stateEl.textContent =
       "JARVIS ATIVO • AGUARDANDO COMANDO";
 
     return;
+
   }
 
-  await executeCommand(command);
+  await executeCommand(
+    command
+  );
+
 }
 
+
 /* =========================================================
-   COMANDOS ESPECIAIS
+   COMANDO
 ========================================================= */
 
-async function executeCommand(command){
+async function executeCommand(
+  command
+){
 
-  brain.questions++;
+  stateEl.textContent =
+    "ANALISANDO • JARVIS CORE";
 
-  saveBrain();
+  /*
+    O novo cérebro registra
+    a pergunta na sessão.
+  */
 
-  /* CÉREBRO */
+  try{
 
-  if (
-    command.includes("mostre seu cérebro") ||
-    command.includes("mostrar seu cérebro") ||
-    command.includes("cérebro para análise") ||
-    command.includes("cerebro para analise") ||
-    command.includes("análise do seu cérebro") ||
-    command.includes("analise do seu cerebro")
+    processQuestion(
+      command
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+  }
+
+
+  /* =======================================================
+     ABRIR CÉREBRO
+  ======================================================= */
+
+  if(
+    command.includes(
+      "mostre seu cérebro"
+    ) ||
+
+    command.includes(
+      "mostrar seu cérebro"
+    ) ||
+
+    command.includes(
+      "cérebro para análise"
+    ) ||
+
+    command.includes(
+      "cerebro para analise"
+    ) ||
+
+    command.includes(
+      "análise do seu cérebro"
+    ) ||
+
+    command.includes(
+      "analise do seu cerebro"
+    ) ||
+
+    command.includes(
+      "mostre o seu cérebro"
+    )
+
   ){
 
     openBrain();
@@ -896,92 +1583,128 @@ async function executeCommand(command){
     );
 
     return;
+
   }
 
-  /* HORA */
 
-  if (
-    command.includes("que horas") ||
-    command.includes("hora agora")
+  /* =======================================================
+     HORA
+  ======================================================= */
+
+  if(
+    command.includes(
+      "que horas"
+    ) ||
+
+    command.includes(
+      "hora agora"
+    )
+
   ){
 
-    const now = new Date();
-
     const time =
-      now.toLocaleTimeString(
-        "pt-BR",
-        {
-          hour:"2-digit",
-          minute:"2-digit"
-        }
-      );
+      new Date()
+        .toLocaleTimeString(
+          "pt-BR",
+          {
+            hour:"2-digit",
+            minute:"2-digit"
+          }
+        );
+
+    try{
+      markKnown("hora e data");
+    }catch{}
 
     speak(
       `Agora são ${time}.`
     );
 
-    brain.answers++;
-    brain.known++;
-
-    saveBrain();
-
     return;
+
   }
 
-  /* DATA */
 
-  if (
-    command.includes("que dia") ||
-    command.includes("data de hoje")
+  /* =======================================================
+     DATA
+  ======================================================= */
+
+  if(
+    command.includes(
+      "que dia"
+    ) ||
+
+    command.includes(
+      "data de hoje"
+    )
+
   ){
 
     const date =
-      new Date().toLocaleDateString(
-        "pt-BR",
-        {
-          weekday:"long",
-          day:"numeric",
-          month:"long",
-          year:"numeric"
-        }
-      );
+      new Date()
+        .toLocaleDateString(
+          "pt-BR",
+          {
+            weekday:"long",
+            day:"numeric",
+            month:"long",
+            year:"numeric"
+          }
+        );
+
+    try{
+      markKnown("data atual");
+    }catch{}
 
     speak(
       `Hoje é ${date}.`
     );
 
-    brain.answers++;
-    brain.known++;
-
-    saveBrain();
-
     return;
+
   }
 
-  /* STATUS */
 
-  if (
-    command.includes("status") ||
-    command.includes("situação do sistema")
+  /* =======================================================
+     STATUS
+  ======================================================= */
+
+  if(
+    command.includes(
+      "status"
+    ) ||
+
+    command.includes(
+      "situação do sistema"
+    )
+
   ){
 
+    const stats =
+      getBrainStats();
+
     speak(
-      "Todos os sistemas principais da interface estão ativos. O núcleo está operacional e o microfone está configurado para escuta automática."
+      `Meu núcleo está operacional. Tenho ${stats.known || 0} conhecimentos conhecidos, ${stats.learned || 0} aprendizados registrados e ${stats.unknown || 0} assuntos ainda não resolvidos.`
     );
 
-    brain.answers++;
-    brain.known++;
-
-    saveBrain();
-
     return;
+
   }
 
-  /* GOOGLE */
 
-  if (
-    command.includes("abrir google") ||
-    command.includes("abra o google")
+  /* =======================================================
+     GOOGLE
+  ======================================================= */
+
+  if(
+    command.includes(
+      "abrir google"
+    ) ||
+
+    command.includes(
+      "abra o google"
+    )
+
   ){
 
     window.open(
@@ -989,16 +1712,28 @@ async function executeCommand(command){
       "_blank"
     );
 
-    speak("Abrindo o Google.");
+    speak(
+      "Abrindo o Google."
+    );
 
     return;
+
   }
 
-  /* YOUTUBE */
 
-  if (
-    command.includes("abrir youtube") ||
-    command.includes("abra o youtube")
+  /* =======================================================
+     YOUTUBE
+  ======================================================= */
+
+  if(
+    command.includes(
+      "abrir youtube"
+    ) ||
+
+    command.includes(
+      "abra o youtube"
+    )
+
   ){
 
     window.open(
@@ -1006,249 +1741,615 @@ async function executeCommand(command){
       "_blank"
     );
 
-    speak("Abrindo o YouTube.");
+    speak(
+      "Abrindo o YouTube."
+    );
 
     return;
+
   }
 
-  /* APRENDIZADO */
 
-  if (
-    command.startsWith("memorize que") ||
-    command.startsWith("aprenda que") ||
-    command.startsWith("lembre que") ||
-    command.startsWith("guarde que")
-  ){
+  /* =======================================================
+     MEMÓRIA / APRENDIZADO
+  ======================================================= */
+
+  const memoryPrefixes = [
+
+    "memorize que",
+
+    "aprenda que",
+
+    "lembre que",
+
+    "guarde que",
+
+    "grave que",
+
+    "registre que"
+
+  ];
+
+  const memoryPrefix =
+    memoryPrefixes.find(
+      prefix =>
+        command.startsWith(
+          prefix
+        )
+    );
+
+  if(memoryPrefix){
 
     const memory =
       command
-        .replace("memorize que","")
-        .replace("aprenda que","")
-        .replace("lembre que","")
-        .replace("guarde que","")
+        .slice(
+          memoryPrefix.length
+        )
         .trim();
 
-    if (memory){
+    if(memory){
 
-      brain.memories.push({
-        text:memory,
-        date:new Date().toISOString()
-      });
+      try{
 
-      brain.learned++;
-      brain.personal++;
+        remember(
+          memory
+        );
 
-      saveBrain();
+        learn(
+          memory,
+          "usuário"
+        );
+
+      }catch(error){
+
+        console.error(
+          error
+        );
+
+      }
 
       speak(
         "Informação registrada na minha memória."
       );
 
       return;
+
     }
+
   }
 
-  /* IA */
 
-  await askAI(command);
+  /* =======================================================
+     CÉREBRO / IA
+  ======================================================= */
+
+  await askJarvisAI(
+    command
+  );
+
 }
 
+
 /* =========================================================
-   IA / API
+   IA
 ========================================================= */
 
-async function askAI(message){
+async function askJarvisAI(
+  message
+){
 
   stateEl.textContent =
-    "ANALISANDO • PROCESSANDO";
+    "ANALISANDO • CÉREBRO JARVIS";
 
   try{
 
-    const memory =
-      brain.memories
-        .slice(-50)
-        .map(item => item.text);
+    /*
+      O ai.js agora é responsável
+      pela comunicação entre o
+      cérebro e a API.
+    */
 
-    const response =
-      await fetch("/api/chat",{
+    const result =
+      await askAI(
+        message
+      );
 
-        method:"POST",
+    let answer = "";
 
-        headers:{
-          "Content-Type":"application/json"
-        },
+    let memoryToSave = null;
 
-        body:JSON.stringify({
+    /*
+      Aceitamos diferentes formatos
+      para manter compatibilidade
+      com o módulo AI.
+    */
 
-          message,
+    if(
+      typeof result ===
+      "string"
+    ){
 
-          memory,
+      answer = result;
 
-          brain:{
-            sessions:brain.sessions,
-            questions:brain.questions,
-            answers:brain.answers,
-            known:brain.known,
-            learned:brain.learned,
-            unknown:brain.unknown,
-            personal:brain.personal
-          }
+    }else if(result){
 
-        })
+      answer =
+        String(
+          result.answer ||
+          result.response ||
+          result.text ||
+          ""
+        );
 
-      });
+      memoryToSave =
+        result.memoryToSave ||
+        null;
 
-    const data =
-      await response.json();
+    }
 
-    if (!response.ok){
+
+    if(
+      !answer.trim()
+    ){
 
       throw new Error(
-        data.error ||
-        "Falha na comunicação com o cérebro."
+        "O cérebro não retornou resposta."
       );
+
     }
 
-    const answer =
-      String(data.answer || "").trim();
 
-    if (!answer){
+    /* =====================================================
+       MEMÓRIA DEVOLVIDA PELA IA
+    ===================================================== */
 
-      throw new Error(
-        "O cérebro não retornou uma resposta."
+    if(memoryToSave){
+
+      try{
+
+        remember(
+          memoryToSave
+        );
+
+        learn(
+          memoryToSave,
+          "IA/JARVIS"
+        );
+
+      }catch(error){
+
+        console.error(
+          error
+        );
+
+      }
+
+    }
+
+
+    try{
+
+      markKnown(
+        message
       );
-    }
 
-    /* MEMÓRIA */
+    }catch{}
 
-    if (data.memoryToSave){
-
-      brain.memories.push({
-        text:data.memoryToSave,
-        date:new Date().toISOString()
-      });
-
-      brain.learned++;
-      brain.personal++;
-    }
-
-    brain.answers++;
-    brain.known++;
-
-    saveBrain();
 
     stateEl.textContent =
       "RESPONDENDO • JARVIS";
 
     /*
-      A resposta NÃO é mostrada na tela.
-      Ela é enviada somente para a voz.
+      IMPORTANTE:
+      A resposta NÃO aparece na tela.
+      Ela é somente falada.
     */
 
-    speak(answer);
+    speak(
+      answer
+    );
+
+
+    updateBrainUI();
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "JARVIS AI:",
+      error
+    );
 
-    brain.unknown++;
+    try{
 
-    saveBrain();
+      markUnknown(
+        message
+      );
+
+    }catch{}
 
     stateEl.textContent =
-      "NÃO RESOLVIDO • TENTE NOVAMENTE";
+      "NÃO RESOLVIDO • JARVIS";
 
     speak(
-      "Não consegui concluir essa análise no momento."
+      "Não consegui concluir essa análise neste momento."
     );
+
+    updateBrainUI();
+
   }
+
 }
 
+
 /* =========================================================
-   CÉREBRO
+   PAINEL DO CÉREBRO
 ========================================================= */
 
 function openBrain(){
 
   stopRecognition();
 
-  brainPanel.style.display = "block";
+  brainPanel.style.display =
+    "block";
 
   updateBrainUI();
+
 }
+
 
 function closeBrainPanel(){
 
-  brainPanel.style.display = "none";
+  brainPanel.style.display =
+    "none";
 
-  setTimeout(() => {
-    startRecognition();
-  }, 500);
+  stateEl.textContent =
+    "MICROFONE ATIVO • AGUARDANDO JARVIS";
+
+  setTimeout(
+    () => {
+
+      startRecognition();
+
+    },
+    500
+  );
+
 }
 
-brainButton.onclick = () => {
 
-  openBrain();
+brainButton.onclick =
+  () => {
 
-  speak(
-    "Abrindo análise do meu cérebro."
-  );
-};
+    openBrain();
+
+    speak(
+      "Abrindo análise do meu cérebro."
+    );
+
+  };
+
 
 closeBrain.onclick =
   closeBrainPanel;
 
+
 /* =========================================================
-   BOTÕES
+   ATUALIZAR CÉREBRO
 ========================================================= */
 
-document.getElementById("timeButton").onclick = () => {
+function updateBrainUI(){
 
-  const time =
-    new Date().toLocaleTimeString(
-      "pt-BR",
-      {
-        hour:"2-digit",
-        minute:"2-digit"
-      }
+  try{
+
+    const stats =
+      getBrainStats();
+
+    const state =
+      getBrainState();
+
+    const knowledge =
+      getKnowledge();
+
+    const session =
+      getSessionStats();
+
+
+    sessionsEl.textContent =
+      stats.sessions ??
+      session.sessions ??
+      0;
+
+    questionsEl.textContent =
+      stats.questions ??
+      session.questions ??
+      0;
+
+    answersEl.textContent =
+      stats.answers ??
+      session.answers ??
+      0;
+
+    knownEl.textContent =
+      stats.known ??
+      knowledge.known.length ??
+      0;
+
+    learnedEl.textContent =
+      stats.learned ??
+      knowledge.learned.length ??
+      0;
+
+    unknownEl.textContent =
+      stats.unknown ??
+      knowledge.unknown.length ??
+      0;
+
+    learningEl.textContent =
+      stats.learning ??
+      knowledge.learning.length ??
+      0;
+
+    personalEl.textContent =
+      stats.personal ??
+      0;
+
+
+    renderList(
+      knownList,
+      knowledge.known
     );
 
-  speak(`Agora são ${time}.`);
-};
+    renderList(
+      learnedList,
+      knowledge.learned
+    );
 
-document.getElementById("statusButton").onclick = () => {
+    renderList(
+      learningList,
+      knowledge.learning
+    );
 
-  speak(
-    "Núcleo operacional. Memória local ativa. Sistema de voz configurado. Comunicação com o motor de inteligência disponível."
-  );
-};
+    renderList(
+      unknownList,
+      knowledge.unknown
+    );
+
+
+    /*
+      Memória pessoal vem do estado
+      do cérebro quando disponível.
+    */
+
+    const personal =
+      state &&
+      Array.isArray(
+        state.personal
+      )
+        ? state.personal
+        : [];
+
+    renderList(
+      personalList,
+      personal
+    );
+
+  }catch(error){
+
+    console.error(
+      "Erro atualizando cérebro:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER LISTAS
+========================================================= */
+
+function renderList(
+  element,
+  items
+){
+
+  if(
+    !element
+  ){
+
+    return;
+
+  }
+
+  if(
+    !Array.isArray(items) ||
+    items.length === 0
+  ){
+
+    element.innerHTML =
+      `
+      <div class="empty">
+        Nenhum registro encontrado.
+      </div>
+      `;
+
+    return;
+
+  }
+
+
+  element.innerHTML =
+    items
+      .slice(-30)
+      .reverse()
+      .map(
+        item => {
+
+          const text =
+            typeof item ===
+            "string"
+
+              ? item
+
+              : (
+                  item.topic ||
+                  item.text ||
+                  item.value ||
+                  "Registro"
+                );
+
+          const source =
+            item &&
+            item.source
+              ? ` • ${item.source}`
+              : "";
+
+          return `
+            <div class="brainEntry">
+              ${escapeHTML(text)}
+              <span style="opacity:.4">
+                ${escapeHTML(source)}
+              </span>
+            </div>
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   PROTEÇÃO DE HTML
+========================================================= */
+
+function escapeHTML(
+  value
+){
+
+  return String(
+    value ?? ""
+  )
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* =========================================================
+   BOTÃO HORA
+========================================================= */
+
+document
+  .getElementById(
+    "timeButton"
+  )
+  .onclick =
+  () => {
+
+    const time =
+      new Date()
+        .toLocaleTimeString(
+          "pt-BR",
+          {
+            hour:"2-digit",
+            minute:"2-digit"
+          }
+        );
+
+    speak(
+      `Agora são ${time}.`
+    );
+
+  };
+
+
+/* =========================================================
+   BOTÃO STATUS
+========================================================= */
+
+document
+  .getElementById(
+    "statusButton"
+  )
+  .onclick =
+  () => {
+
+    const stats =
+      getBrainStats();
+
+    speak(
+      `Sistema operacional. ${stats.known || 0} conhecimentos conhecidos, ${stats.learned || 0} aprendizados e ${stats.unknown || 0} assuntos desconhecidos.`
+    );
+
+  };
+
 
 /* =========================================================
    INICIALIZAÇÃO
 ========================================================= */
 
-startButton.onclick = async () => {
+startButton.onclick =
+  async () => {
 
-  permission.style.display = "none";
-
-  brain.sessions++;
-
-  saveBrain();
-
-  stateEl.textContent =
-    "INICIALIZANDO JARVIS";
-
-  if (recognition){
-
-    try{
-      startRecognition();
-    }catch{}
-  }else{
+    permission.style.display =
+      "none";
 
     stateEl.textContent =
-      "VOZ NÃO DISPONÍVEL NESTE NAVEGADOR";
-  }
-};
+      "INICIALIZANDO JARVIS";
+
+    try{
+
+      initializeBrain();
+
+    }catch(error){
+
+      console.error(
+        error
+      );
+
+    }
+
+    /*
+      Solicita permissão do microfone
+      através do reconhecimento.
+    */
+
+    if(recognition){
+
+      startRecognition();
+
+    }else{
+
+      stateEl.textContent =
+        "VOZ NÃO DISPONÍVEL NESTE NAVEGADOR";
+
+    }
+
+    updateBrainUI();
+
+  };
+
 
 /* =========================================================
    CONEXÃO
@@ -1256,7 +2357,9 @@ startButton.onclick = async () => {
 
 function updateConnection(){
 
-  if (navigator.onLine){
+  if(
+    navigator.onLine
+  ){
 
     connection.textContent =
       "ONLINE";
@@ -1265,7 +2368,9 @@ function updateConnection(){
 
     connection.textContent =
       "OFFLINE";
+
   }
+
 }
 
 window.addEventListener(
@@ -1279,19 +2384,26 @@ window.addEventListener(
 );
 
 updateConnection();
+
 updateBrainUI();
+
 
 /* =========================================================
    FUNDO DE PARTÍCULAS
 ========================================================= */
 
 const space =
-  document.getElementById("space");
+  document.getElementById(
+    "space"
+  );
 
 const sctx =
-  space.getContext("2d");
+  space.getContext(
+    "2d"
+  );
 
 let stars = [];
+
 
 function resizeSpace(){
 
@@ -1313,21 +2425,39 @@ function resizeSpace(){
       )
     );
 
-  for(let i=0;i<amount;i++){
+
+  for(
+    let i = 0;
+    i < amount;
+    i++
+  ){
 
     stars.push({
 
-      x:Math.random()*space.width,
+      x:
+        Math.random() *
+        space.width,
 
-      y:Math.random()*space.height,
+      y:
+        Math.random() *
+        space.height,
 
-      r:Math.random()*1.2+.2,
+      r:
+        Math.random() *
+        1.2 +
+        .2,
 
-      a:Math.random()*.7+.1
+      a:
+        Math.random() *
+        .7 +
+        .1
 
     });
+
   }
+
 }
+
 
 function drawSpace(){
 
@@ -1338,7 +2468,11 @@ function drawSpace(){
     space.height
   );
 
-  for(const star of stars){
+
+  for(
+    const star
+    of stars
+  ){
 
     sctx.beginPath();
 
@@ -1347,17 +2481,28 @@ function drawSpace(){
       star.y,
       star.r,
       0,
-      Math.PI*2
+      Math.PI * 2
     );
 
     sctx.fillStyle =
-      `rgba(150,235,255,${star.a})`;
+      `rgba(
+        150,
+        235,
+        255,
+        ${star.a}
+      )`;
 
     sctx.fill();
+
   }
 
-  requestAnimationFrame(drawSpace);
+
+  requestAnimationFrame(
+    drawSpace
+  );
+
 }
+
 
 window.addEventListener(
   "resize",
@@ -1365,19 +2510,26 @@ window.addEventListener(
 );
 
 resizeSpace();
+
 drawSpace();
+
 
 /* =========================================================
    CÉREBRO VISUAL
 ========================================================= */
 
 const canvas =
-  document.getElementById("brainCanvas");
+  document.getElementById(
+    "brainCanvas"
+  );
 
 const ctx =
-  canvas.getContext("2d");
+  canvas.getContext(
+    "2d"
+  );
 
 let particles = [];
+
 
 function resizeBrain(){
 
@@ -1385,10 +2537,12 @@ function resizeBrain(){
     canvas.getBoundingClientRect();
 
   canvas.width =
-    rect.width * devicePixelRatio;
+    rect.width *
+    devicePixelRatio;
 
   canvas.height =
-    rect.height * devicePixelRatio;
+    rect.height *
+    devicePixelRatio;
 
   ctx.setTransform(
     devicePixelRatio,
@@ -1400,7 +2554,9 @@ function resizeBrain(){
   );
 
   createParticles();
+
 }
+
 
 function createParticles(){
 
@@ -1415,12 +2571,20 @@ function createParticles(){
   const cy =
     rect.height / 2;
 
-  const count = 430;
+  const count =
+    430;
 
-  for(let i=0;i<count;i++){
+
+  for(
+    let i = 0;
+    i < count;
+    i++
+  ){
 
     const angle =
-      Math.random()*Math.PI*2;
+      Math.random() *
+      Math.PI *
+      2;
 
     const radius =
       Math.pow(
@@ -1433,17 +2597,23 @@ function createParticles(){
       ) *
       .32;
 
+
     const x =
       cx +
       Math.cos(angle) *
       radius *
-      (1.15 + Math.random()*.35);
+      (
+        1.15 +
+        Math.random() * .35
+      );
+
 
     const y =
       cy +
       Math.sin(angle) *
       radius *
       .72;
+
 
     particles.push({
 
@@ -1453,19 +2623,34 @@ function createParticles(){
       ox:x,
       oy:y,
 
-      vx:(Math.random()-.5)*.3,
+      vx:
+        (Math.random()-.5) *
+        .3,
 
-      vy:(Math.random()-.5)*.3,
+      vy:
+        (Math.random()-.5) *
+        .3,
 
-      r:Math.random()*1.5+.3,
+      r:
+        Math.random() *
+        1.5 +
+        .3,
 
-      phase:Math.random()*Math.PI*2
+      phase:
+        Math.random() *
+        Math.PI *
+        2
 
     });
+
   }
+
 }
 
-function drawBrain(time){
+
+function drawBrain(
+  time
+){
 
   const rect =
     canvas.getBoundingClientRect();
@@ -1477,52 +2662,72 @@ function drawBrain(time){
     rect.height
   );
 
-  const cx =
-    rect.width/2;
 
-  const cy =
-    rect.height/2;
-
-  for(const p of particles){
+  for(
+    const p
+    of particles
+  ){
 
     const pulse =
       Math.sin(
-        time*.0015 +
+        time *
+        .0015 +
         p.phase
-      ) * .9;
+      ) *
+      .9;
+
 
     p.x =
       p.ox +
       Math.sin(
-        time*.0007 +
+        time *
+        .0007 +
         p.phase
-      ) * 3;
+      ) *
+      3;
+
 
     p.y =
       p.oy +
       Math.cos(
-        time*.0009 +
+        time *
+        .0009 +
         p.phase
-      ) * 3;
+      ) *
+      3;
+
 
     ctx.beginPath();
+
 
     ctx.arc(
       p.x,
       p.y,
-      Math.max(.2,p.r+pulse*.2),
+      Math.max(
+        .2,
+        p.r +
+        pulse *
+        .2
+      ),
       0,
-      Math.PI*2
+      Math.PI * 2
     );
+
 
     ctx.fillStyle =
       "rgba(70,225,255,.72)";
 
     ctx.fill();
+
   }
 
-  requestAnimationFrame(drawBrain);
+
+  requestAnimationFrame(
+    drawBrain
+  );
+
 }
+
 
 window.addEventListener(
   "resize",
@@ -1531,7 +2736,10 @@ window.addEventListener(
 
 resizeBrain();
 
-requestAnimationFrame(drawBrain);
+requestAnimationFrame(
+  drawBrain
+);
+
 
 /* =========================================================
    VISIBILIDADE
@@ -1541,27 +2749,22 @@ document.addEventListener(
   "visibilitychange",
   () => {
 
-    /*
-      Navegadores podem interromper
-      o microfone quando a aba vai
-      para segundo plano.
-
-      Quando voltar, tentamos
-      recuperar automaticamente.
-    */
-
-    if (
-      document.visibilityState === "visible" &&
+    if(
+      document.visibilityState ===
+        "visible" &&
       !speaking &&
-      !brainPanel.style.display
+      brainPanel.style.display !==
+        "block"
     ){
 
       restartRecognition();
+
     }
+
   }
 );
 
 </script>
 
 </body>
-</html>
+  </html>
