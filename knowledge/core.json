@@ -1,0 +1,53 @@
+{
+  "name": "JARVIS Knowledge Core",
+  "version": "1.0.0",
+  "status": "active",
+
+  "categories": [
+    "programação",
+    "tecnologia",
+    "inteligência artificial",
+    "matemática",
+    "física",
+    "química",
+    "biologia",
+    "ciência",
+    "história",
+    "geografia",
+    "astronomia",
+    "engenharia",
+    "computadores",
+    "internet",
+    "segurança",
+    "sistemas operacionais",
+    "desenvolvimento web",
+    "desenvolvimento mobile",
+    "bancos de dados",
+    "Firebase",
+    "JavaScript",
+    "HTML",
+    "CSS",
+    "Android",
+    "redes",
+    "algoritmos",
+    "educação"
+  ],
+
+  "knowledge_rules": {
+    "answer_questions": true,
+    "analyze_problems": true,
+    "explain_concepts": true,
+    "learn_from_user": true,
+    "store_memory": true,
+    "avoid_inventing_information": true,
+    "identify_unknown_topics": true
+  },
+
+  "learning_states": {
+    "known": "Conhecimento que o JARVIS consegue responder com segurança.",
+    "learned": "Informação registrada durante o aprendizado.",
+    "learning": "Assunto que precisa de mais informações.",
+    "unknown": "Informação que o JARVIS ainda não consegue determinar.",
+    "personal": "Informações pessoais fornecidas pelo proprietário."
+  }
+}
