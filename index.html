@@ -1,0 +1,2124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#020507">
+
+<title>JARVIS — Official Core</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#020507;
+    color:#dffcff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    user-select:none;
+}
+
+#app{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    background:
+        radial-gradient(
+            circle at 50% 50%,
+            rgba(0,190,255,.12),
+            transparent 32%
+        ),
+        #020507;
+}
+
+#space{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+}
+
+/* TOPO */
+
+.top{
+    position:absolute;
+    top:max(18px,env(safe-area-inset-top));
+    left:0;
+    right:0;
+    text-align:center;
+    z-index:10;
+    pointer-events:none;
+}
+
+.status{
+    font-size:11px;
+    letter-spacing:4px;
+    color:#78eaff;
+    text-shadow:0 0 15px #00bfff;
+}
+
+.sub{
+    margin-top:7px;
+    font-size:8px;
+    letter-spacing:2px;
+    color:#58747c;
+}
+
+/* NÚCLEO */
+
+.core{
+    position:absolute;
+
+    width:min(74vw,410px);
+    height:min(74vw,410px);
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    z-index:5;
+}
+
+.ring{
+    position:absolute;
+    inset:3%;
+
+    border:1px solid rgba(0,220,255,.22);
+
+    border-radius:50%;
+
+    animation:spin 16s linear infinite;
+}
+
+.ring:nth-child(2){
+    inset:14%;
+    border-style:dashed;
+    animation-duration:10s;
+    animation-direction:reverse;
+}
+
+.ring:nth-child(3){
+    inset:26%;
+    animation-duration:7s;
+}
+
+.glow{
+    position:absolute;
+
+    inset:37%;
+
+    border-radius:50%;
+
+    box-shadow:
+        0 0 28px #00cfff,
+        0 0 90px rgba(0,190,255,.35);
+
+    animation:pulse 2s ease-in-out infinite;
+}
+
+.coreText{
+    position:absolute;
+    inset:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    flex-direction:column;
+
+    text-align:center;
+}
+
+.coreText b{
+    font-size:14px;
+    letter-spacing:5px;
+}
+
+.coreText span{
+    margin-top:9px;
+
+    font-size:8px;
+    letter-spacing:3px;
+
+    color:#6b8a92;
+}
+
+/* RODAPÉ */
+
+.bottom{
+    position:absolute;
+
+    bottom:max(20px,env(safe-area-inset-bottom));
+
+    left:0;
+    right:0;
+
+    text-align:center;
+
+    z-index:10;
+}
+
+.hint{
+    font-size:8px;
+    letter-spacing:2px;
+    color:#48666f;
+}
+
+/* CÉREBRO */
+
+.panel{
+    position:absolute;
+
+    inset:0;
+
+    z-index:30;
+
+    display:none;
+
+    overflow:auto;
+
+    padding:
+        65px
+        17px
+        30px;
+
+    background:rgba(1,6,9,.98);
+}
+
+.panel.open{
+    display:block;
+}
+
+.head{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+}
+
+.head h1{
+    font-size:16px;
+
+    letter-spacing:4px;
+}
+
+.close{
+    background:#071319;
+
+    color:#9cefff;
+
+    border:1px solid #23515d;
+
+    border-radius:20px;
+
+    padding:8px 13px;
+}
+
+.title{
+    margin-top:23px;
+
+    color:#66848c;
+
+    font-size:9px;
+
+    letter-spacing:3px;
+}
+
+.grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:9px;
+
+    margin-top:9px;
+}
+
+.card{
+    background:#061015;
+
+    border:1px solid rgba(0,220,255,.15);
+
+    border-radius:13px;
+
+    padding:14px;
+}
+
+.num{
+    font-size:27px;
+
+    font-weight:bold;
+}
+
+.lab{
+    margin-top:6px;
+
+    font-size:8px;
+
+    letter-spacing:1.7px;
+
+    color:#67838a;
+
+    line-height:1.3;
+}
+
+.green{
+    color:#4dff9a;
+}
+
+.blue{
+    color:#50caff;
+}
+
+.yellow{
+    color:#ffd34d;
+}
+
+.red{
+    color:#ff6565;
+}
+
+.purple{
+    color:#c48aff;
+}
+
+.list{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:7px;
+
+    margin-top:9px;
+}
+
+.row{
+    background:#061015;
+
+    border-radius:9px;
+
+    padding:10px 11px;
+
+    font-size:10px;
+
+    line-height:1.45;
+
+    border-left:3px solid #25434b;
+}
+
+.row.green{
+    border-left-color:#4dff9a;
+}
+
+.row.blue{
+    border-left-color:#50caff;
+}
+
+.row.red{
+    border-left-color:#ff6565;
+}
+
+/* PERMISSÃO */
+
+.permission{
+    position:absolute;
+
+    inset:0;
+
+    z-index:50;
+
+    background:rgba(0,0,0,.86);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:25px;
+}
+
+.box{
+    width:min(380px,100%);
+
+    background:#061015;
+
+    border:1px solid #205662;
+
+    border-radius:18px;
+
+    padding:24px;
+
+    text-align:center;
+}
+
+.box h2{
+    font-size:17px;
+
+    letter-spacing:3px;
+}
+
+.box p{
+    margin:15px 0;
+
+    font-size:12px;
+
+    color:#8ca8af;
+
+    line-height:1.6;
+}
+
+.start{
+    padding:13px 20px;
+
+    border-radius:25px;
+
+    border:1px solid #2b9eb4;
+
+    background:#09232c;
+
+    color:#a1efff;
+
+    letter-spacing:2px;
+}
+
+.hidden{
+    display:none!important;
+}
+
+/* ANIMAÇÕES */
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+@keyframes pulse{
+    50%{
+        transform:scale(1.13);
+        opacity:.62;
+    }
+}
+
+@media(min-width:700px){
+
+    .grid{
+        grid-template-columns:
+            repeat(4,1fr);
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+<canvas id="space"></canvas>
+
+<!-- STATUS -->
+
+<div class="top">
+
+    <div
+        id="status"
+        class="status"
+    >
+        JARVIS • INICIALIZANDO
+    </div>
+
+    <div class="sub">
+        OFFICIAL CORE V1 • VOICE • MEMORY • BRAIN
+    </div>
+
+</div>
+
+
+<!-- NÚCLEO -->
+
+<div class="core">
+
+    <div class="ring"></div>
+
+    <div class="ring"></div>
+
+    <div class="ring"></div>
+
+    <div class="glow"></div>
+
+    <div class="coreText">
+
+        <b id="coreState">
+            AGUARDANDO
+        </b>
+
+        <span id="coreSub">
+            MICROFONE
+        </span>
+
+    </div>
+
+</div>
+
+
+<!-- RODAPÉ -->
+
+<div class="bottom">
+
+    <div class="hint">
+        ESCUTA AUTOMÁTICA • SEM BIPES • RESPOSTA POR VOZ
+    </div>
+
+</div>
+
+
+<!-- CÉREBRO -->
+
+<div
+    id="brain"
+    class="panel"
+>
+
+    <div class="head">
+
+        <h1>
+            CÉREBRO DO JARVIS
+        </h1>
+
+        <button
+            id="close"
+            class="close"
+        >
+            VOLTAR
+        </button>
+
+    </div>
+
+
+    <div class="title">
+        SESSÃO E OPERAÇÃO
+    </div>
+
+
+    <div class="grid">
+
+        <div class="card">
+
+            <div
+                id="sessions"
+                class="num green"
+            >
+                0
+            </div>
+
+            <div class="lab">
+                SESSÕES
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div
+                id="questions"
+                class="num green"
+            >
+                0
+            </div>
+
+            <div class="lab">
+                PERGUNTAS
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div
+                id="answers"
+                class="num green"
+            >
+                0
+            </div>
+
+            <div class="lab">
+                RESPOSTAS
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div
+                id="memories"
+                class="num purple"
+            >
+                0
+            </div>
+
+            <div class="lab">
+                MEMÓRIAS PESSOAIS
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="title">
+        MAPA DE CONHECIMENTO
+    </div>
+
+
+    <div class="grid">
+
+        <div class="card">
+
+            <div
+                id="known"
+                class="num green"
+            >
+                0
+            </div>
+
+            <div class="lab">
+                CONSULTADO / RESOLVIDO
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div
+                id="learned"
+                class="num blue"
+            >
+                0
+            </div>
+
+            <div class="lab">
+                APRENDIZADO REGISTRADO
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div
+                id="learning"
+                class="num yellow"
+            >
+                0
+            </div>
+
+            <div class="lab">
+                EM APRENDIZADO
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div
+                id="unknown"
+                class="num red"
+            >
+                0
+            </div>
+
+            <div class="lab">
+                NÃO RESOLVIDO
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="title">
+        MEMÓRIA PESSOAL
+    </div>
+
+    <div
+        id="memoryList"
+        class="list"
+    ></div>
+
+
+    <div class="title">
+        EVENTOS RECENTES
+    </div>
+
+    <div
+        id="events"
+        class="list"
+    ></div>
+
+</div>
+
+
+<!-- PRIMEIRA PERMISSÃO -->
+
+<div
+    id="permission"
+    class="permission"
+>
+
+    <div class="box">
+
+        <h2>
+            JARVIS CORE
+        </h2>
+
+        <p>
+            A primeira autorização do microfone precisa ser feita manualmente pelo navegador.
+            Depois disso, o núcleo tenta manter a escuta automaticamente,
+            sem botão recorrente e sem som de ativação.
+        </p>
+
+        <button
+            id="start"
+            class="start"
+        >
+            ATIVAR MICROFONE
+        </button>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<script>
+
+"use strict";
+
+
+/* =========================================
+   JARVIS OFFICIAL CORE V1
+========================================= */
+
+const $ = id =>
+    document.getElementById(id);
+
+
+const STORAGE_KEY =
+    "JARVIS_OFFICIAL_BRAIN_V1";
+
+
+let database =
+    JSON.parse(
+        localStorage.getItem(STORAGE_KEY)
+    );
+
+
+if(!database){
+
+    database = {
+
+        version:1,
+
+        sessions:0,
+
+        questions:0,
+
+        answers:0,
+
+        memories:[],
+
+        known:[],
+
+        learned:[],
+
+        learning:[],
+
+        unknown:[],
+
+        events:[]
+
+    };
+
+}
+
+
+let recognition = null;
+
+let listening = false;
+
+let speaking = false;
+
+let wakeWaiting = false;
+
+let wakeTimer = null;
+
+let voices = [];
+
+
+/* =========================================
+   BANCO LOCAL
+========================================= */
+
+function saveDatabase(){
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(database)
+    );
+
+    renderBrain();
+
+}
+
+
+function normalize(text){
+
+    return String(text)
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g,"")
+        .trim();
+
+}
+
+
+function addUnique(array,text){
+
+    if(!text)return;
+
+    const exists =
+        array.some(
+            item =>
+                normalize(item) ===
+                normalize(text)
+        );
+
+    if(!exists){
+
+        array.unshift(text);
+
+    }
+
+    if(array.length > 100){
+
+        array.length = 100;
+
+    }
+
+}
+
+
+function addEvent(type,text){
+
+    database.events.unshift({
+
+        time:
+            new Date()
+                .toLocaleTimeString(
+                    "pt-BR",
+                    {
+                        hour:"2-digit",
+                        minute:"2-digit"
+                    }
+                ),
+
+        type,
+
+        text
+
+    });
+
+    database.events =
+        database.events.slice(0,40);
+
+    saveDatabase();
+
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+function setState(main,sub){
+
+    $("coreState").textContent =
+        main;
+
+    $("coreSub").textContent =
+        sub;
+
+    $("status").textContent =
+        "JARVIS • " + main;
+
+}
+
+
+/* =========================================
+   VOZ
+========================================= */
+
+function loadVoices(){
+
+    voices =
+        speechSynthesis.getVoices();
+
+}
+
+speechSynthesis.onvoiceschanged =
+    loadVoices;
+
+loadVoices();
+
+
+function selectVoice(){
+
+    const preferred = [
+
+        "Daniel",
+
+        "Luciano",
+
+        "Felipe",
+
+        "Ricardo",
+
+        "Microsoft Daniel",
+
+        "Google português"
+
+    ];
+
+
+    for(
+        const name of preferred
+    ){
+
+        const found =
+            voices.find(
+                voice =>
+                    voice.name
+                        .toLowerCase()
+                        .includes(
+                            name.toLowerCase()
+                        )
+                    &&
+                    /pt-BR|pt_BR/i
+                        .test(voice.lang)
+            );
+
+
+        if(found){
+
+            return found;
+
+        }
+
+    }
+
+
+    return (
+
+        voices.find(
+            voice =>
+                /pt-BR/i
+                    .test(voice.lang)
+        )
+
+        ||
+
+        voices.find(
+            voice =>
+                /^pt/i
+                    .test(voice.lang)
+        )
+
+        ||
+
+        null
+
+    );
+
+}
+
+
+function speak(text){
+
+    if(!text)return;
+
+
+    speaking = true;
+
+
+    stopRecognition();
+
+
+    setState(
+        "RESPONDENDO",
+        "VOZ JARVIS"
+    );
+
+
+    const utterance =
+        new SpeechSynthesisUtterance(
+            text
+        );
+
+
+    const voice =
+        selectVoice();
+
+
+    if(voice){
+
+        utterance.voice =
+            voice;
+
+    }
+
+
+    utterance.lang =
+        voice?.lang ||
+        "pt-BR";
+
+
+    utterance.rate =
+        0.90;
+
+
+    utterance.pitch =
+        0.72;
+
+
+    utterance.volume =
+        1;
+
+
+    utterance.onend = () => {
+
+        speaking = false;
+
+        setState(
+            "AGUARDANDO",
+            "MICROFONE ATIVO"
+        );
+
+        startRecognition();
+
+    };
+
+
+    utterance.onerror = () => {
+
+        speaking = false;
+
+        startRecognition();
+
+    };
+
+
+    speechSynthesis.cancel();
+
+    speechSynthesis.speak(
+        utterance
+    );
+
+}
+
+
+/* =========================================
+   RECONHECIMENTO
+========================================= */
+
+function createRecognition(){
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+
+    if(!SpeechRecognition){
+
+        setState(
+            "INDISPONÍVEL",
+            "USE CHROME"
+        );
+
+        return null;
+
+    }
+
+
+    const r =
+        new SpeechRecognition();
+
+
+    r.lang =
+        "pt-BR";
+
+
+    r.continuous =
+        true;
+
+
+    r.interimResults =
+        true;
+
+
+    r.maxAlternatives =
+        1;
+
+
+    r.onstart = () => {
+
+        listening = true;
+
+
+        if(!speaking){
+
+            setState(
+                "OUVINDO",
+                "MICROFONE ATIVO"
+            );
+
+        }
+
+    };
+
+
+    r.onend = () => {
+
+        listening = false;
+
+
+        if(!speaking){
+
+            setTimeout(
+                startRecognition,
+                350
+            );
+
+        }
+
+    };
+
+
+    r.onerror = event => {
+
+        listening = false;
+
+
+        if(
+
+            event.error ===
+                "not-allowed"
+
+            ||
+
+            event.error ===
+                "service-not-allowed"
+
+        ){
+
+            $("permission")
+                .classList
+                .remove("hidden");
+
+
+            setState(
+                "MICROFONE BLOQUEADO",
+                "PERMISSÃO NECESSÁRIA"
+            );
+
+
+            return;
+
+        }
+
+
+        if(!speaking){
+
+            setTimeout(
+                startRecognition,
+                700
+            );
+
+        }
+
+    };
+
+
+    r.onresult = event => {
+
+        let transcript = "";
+
+
+        for(
+            let i = event.resultIndex;
+            i < event.results.length;
+            i++
+        ){
+
+            transcript +=
+                event.results[i][0]
+                    .transcript
+                + " ";
+
+        }
+
+
+        transcript =
+            transcript.trim();
+
+
+        if(!transcript)return;
+
+
+        const normalized =
+            normalize(transcript);
+
+
+        if(
+
+            normalized ===
+                window.__lastTranscript
+
+            &&
+
+            Date.now() -
+                window.__lastTranscriptTime
+                < 1800
+
+        ){
+
+            return;
+
+        }
+
+
+        window.__lastTranscript =
+            normalized;
+
+
+        window.__lastTranscriptTime =
+            Date.now();
+
+
+        /*
+          JARVIS + comando
+        */
+
+        if(wakeWaiting){
+
+            wakeWaiting = false;
+
+            clearTimeout(
+                wakeTimer
+            );
+
+
+            const command =
+                transcript
+                    .replace(
+                        /\bjarvis[,:;.!]?\s*/i,
+                        ""
+                    )
+                    .trim();
+
+
+            if(command){
+
+                processCommand(
+                    command
+                );
+
+            }
+
+
+            return;
+
+        }
+
+
+        if(
+            /\bjarvis\b/i
+                .test(transcript)
+        ){
+
+            const command =
+                transcript
+                    .replace(
+                        /\bjarvis[,:;.!]?\s*/i,
+                        ""
+                    )
+                    .trim();
+
+
+            if(command){
+
+                processCommand(
+                    command
+                );
+
+            }else{
+
+                wakeWaiting = true;
+
+
+                setState(
+                    "OUVINDO",
+                    "AGUARDANDO COMANDO"
+                );
+
+
+                wakeTimer =
+                    setTimeout(
+                        () => {
+
+                            wakeWaiting =
+                                false;
+
+                            setState(
+                                "AGUARDANDO",
+                                "MICROFONE ATIVO"
+                            );
+
+                        },
+                        5000
+                    );
+
+            }
+
+        }
+
+    };
+
+
+    return r;
+
+}
+
+
+/* =========================================
+   MICROFONE
+========================================= */
+
+function stopRecognition(){
+
+    if(!recognition)return;
+
+
+    try{
+
+        recognition.onend =
+            null;
+
+        recognition.stop();
+
+    }catch(error){}
+
+
+    listening = false;
+
+}
+
+
+function startRecognition(){
+
+    if(
+        speaking ||
+        listening
+    ){
+
+        return;
+
+    }
+
+
+    if(!recognition){
+
+        recognition =
+            createRecognition();
+
+    }
+
+
+    if(!recognition)return;
+
+
+    try{
+
+        recognition.start();
+
+    }catch(error){}
+
+}
+
+
+/* =========================================
+   CÉREBRO
+========================================= */
+
+function openBrain(){
+
+    stopRecognition();
+
+    $("brain")
+        .classList
+        .add("open");
+
+    renderBrain();
+
+}
+
+
+function closeBrain(){
+
+    $("brain")
+        .classList
+        .remove("open");
+
+    startRecognition();
+
+}
+
+
+$("close").onclick =
+    closeBrain;
+
+
+function renderBrain(){
+
+    $("sessions").textContent =
+        database.sessions;
+
+    $("questions").textContent =
+        database.questions;
+
+    $("answers").textContent =
+        database.answers;
+
+    $("memories").textContent =
+        database.memories.length;
+
+    $("known").textContent =
+        database.known.length;
+
+    $("learned").textContent =
+        database.learned.length;
+
+    $("learning").textContent =
+        database.learning.length;
+
+    $("unknown").textContent =
+        database.unknown.length;
+
+
+    $("memoryList").innerHTML =
+
+        database.memories.length
+
+        ?
+
+        database.memories
+            .slice(0,15)
+            .map(
+                item =>
+                    `<div class="row blue">
+                        ${escapeHTML(item)}
+                    </div>`
+            )
+            .join("")
+
+        :
+
+        `<div class="row">
+            Nenhuma memória pessoal registrada.
+        </div>`;
+
+
+    $("events").innerHTML =
+
+        database.events.length
+
+        ?
+
+        database.events
+            .slice(0,20)
+            .map(
+                event =>
+                    `<div class="row ${
+                        event.type === "UNKNOWN"
+                            ? "red"
+                            :
+                        event.type === "LEARNED"
+                            ? "blue"
+                            :
+                            "green"
+                    }">
+                        <b>${event.time}</b>
+                        • ${escapeHTML(event.type)}
+                        • ${escapeHTML(event.text)}
+                    </div>`
+            )
+            .join("")
+
+        :
+
+        `<div class="row">
+            Nenhum evento registrado.
+        </div>`;
+
+}
+
+
+function escapeHTML(text){
+
+    return String(text)
+        .replace(
+            /[&<>"']/g,
+            char =>
+                ({
+                    "&":"&amp;",
+                    "<":"&lt;",
+                    ">":"&gt;",
+                    '"':"&quot;",
+                    "'":"&#039;"
+                }[char])
+        );
+
+}
+
+
+/* =========================================
+   COMANDOS
+========================================= */
+
+async function processCommand(command){
+
+    const n =
+        normalize(command);
+
+
+    /*
+      ABRIR CÉREBRO
+    */
+
+    if(
+
+        n.includes(
+            "mostre o seu cerebro"
+        )
+
+        ||
+
+        n.includes(
+            "mostrar seu cerebro"
+        )
+
+        ||
+
+        n.includes(
+            "cerebro para analise"
+        )
+
+        ||
+
+        n.includes(
+            "analise seu cerebro"
+        )
+
+    ){
+
+        openBrain();
+
+        speak(
+            "Abrindo meu cérebro para análise."
+        );
+
+        return;
+
+    }
+
+
+    /*
+      VOLTAR
+    */
+
+    if(
+
+        n === "voltar"
+
+        ||
+
+        n.includes(
+            "fechar cerebro"
+        )
+
+        ||
+
+        n.includes(
+            "fechar analise"
+        )
+
+    ){
+
+        closeBrain();
+
+        speak(
+            "Voltando ao núcleo principal."
+        );
+
+        return;
+
+    }
+
+
+    /*
+      HORÁRIO
+    */
+
+    if(
+        n.includes("que horas")
+    ){
+
+        speak(
+            "Agora são " +
+
+            new Date()
+                .toLocaleTimeString(
+                    "pt-BR",
+                    {
+                        hour:"2-digit",
+                        minute:"2-digit"
+                    }
+                )
+            + "."
+        );
+
+        return;
+
+    }
+
+
+    /*
+      DATA
+    */
+
+    if(
+
+        n.includes("que dia")
+
+        ||
+
+        n.includes("data de hoje")
+
+    ){
+
+        speak(
+            "Hoje é " +
+
+            new Date()
+                .toLocaleDateString(
+                    "pt-BR",
+                    {
+                        dateStyle:"full"
+                    }
+                )
+            + "."
+        );
+
+        return;
+
+    }
+
+
+    /*
+      MEMÓRIA EXPLÍCITA
+    */
+
+    const memory =
+        command.replace(
+            /^(aprenda que|memorize que|lembre que|guarde que)\s*/i,
+            ""
+        ).trim();
+
+
+    if(
+
+        /^(aprenda que|memorize que|lembre que|guarde que)/i
+            .test(command)
+
+        &&
+
+        memory
+
+    ){
+
+        addUnique(
+            database.memories,
+            memory
+        );
+
+
+        addUnique(
+            database.learned,
+            memory
+        );
+
+
+        addEvent(
+            "LEARNED",
+            memory
+        );
+
+
+        speak(
+            "Informação registrada na minha memória pessoal."
+        );
+
+
+        return;
+
+    }
+
+
+    /*
+      PERGUNTA PARA A IA
+    */
+
+    database.questions++;
+
+
+    addEvent(
+        "QUESTION",
+        command
+    );
+
+
+    setState(
+        "ANALISANDO",
+        "PROCESSANDO"
+    );
+
+
+    try{
+
+        const response =
+            await fetch(
+                "/api/chat",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            message:
+                                command,
+
+                            memory:
+                                database
+                                    .memories
+                                    .slice(0,30),
+
+                            brain:{
+
+                                known:
+                                    database
+                                        .known
+                                        .slice(0,20),
+
+                                learned:
+                                    database
+                                        .learned
+                                        .slice(0,20),
+
+                                unknown:
+                                    database
+                                        .unknown
+                                        .slice(0,20)
+
+                            }
+
+                        })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(!response.ok){
+
+            throw new Error(
+                data.error ||
+                "Falha no núcleo."
+            );
+
+        }
+
+
+        const answer =
+            String(
+                data.answer || ""
+            ).trim();
+
+
+        if(!answer){
+
+            throw new Error(
+                "Resposta vazia."
+            );
+
+        }
+
+
+        database.answers++;
+
+
+        addUnique(
+            database.known,
+            command
+        );
+
+
+        if(data.memoryToSave){
+
+            addUnique(
+                database.memories,
+                data.memoryToSave
+            );
+
+
+            addUnique(
+                database.learned,
+                data.memoryToSave
+            );
+
+
+            addEvent(
+                "LEARNED",
+                data.memoryToSave
+            );
+
+        }
+
+
+        addEvent(
+            "ANSWER",
+            "Resposta concluída para: " +
+            command
+        );
+
+
+        saveDatabase();
+
+
+        /*
+          IMPORTANTE:
+          não mostramos a resposta na tela.
+          Ela será falada pelo JARVIS.
+        */
+
+        speak(answer);
+
+    }catch(error){
+
+        addUnique(
+            database.unknown,
+            command
+        );
+
+
+        addEvent(
+            "UNKNOWN",
+            command +
+            " — " +
+            error.message
+        );
+
+
+        saveDatabase();
+
+
+        speak(
+            "Não consegui concluir essa análise agora. Registrei a pergunta como não resolvida."
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   PRIMEIRA ATIVAÇÃO
+========================================= */
+
+$("start").onclick =
+    () => {
+
+        $("permission")
+            .classList
+            .add("hidden");
+
+
+        database.sessions++;
+
+
+        addEvent(
+            "SESSION",
+            "Nova sessão iniciada."
+        );
+
+
+        startRecognition();
+
+    };
+
+
+/*
+  Quando voltar para a página,
+  tenta recuperar a escuta.
+*/
+
+document.addEventListener(
+    "visibilitychange",
+    () => {
+
+        if(
+
+            document.visibilityState ===
+                "visible"
+
+            &&
+
+            !speaking
+
+            &&
+
+            !$("brain")
+                .classList
+                .contains("open")
+
+        ){
+
+            setTimeout(
+                startRecognition,
+                500
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   FUNDO DE PARTÍCULAS
+========================================= */
+
+const canvas =
+    $("space");
+
+
+const ctx =
+    canvas.getContext("2d");
+
+
+let W,H,particles=[];
+
+
+function resizeCanvas(){
+
+    W =
+        canvas.width =
+            innerWidth *
+            devicePixelRatio;
+
+
+    H =
+        canvas.height =
+            innerHeight *
+            devicePixelRatio;
+
+
+    canvas.style.width =
+        innerWidth + "px";
+
+
+    canvas.style.height =
+        innerHeight + "px";
+
+
+    particles =
+        Array.from(
+            {
+                length:
+                    Math.min(
+                        180,
+                        Math.floor(
+                            innerWidth / 3
+                        )
+                    )
+            },
+            () => ({
+
+                x:
+                    Math.random()*W,
+
+                y:
+                    Math.random()*H,
+
+                vx:
+                    (Math.random()-.5)
+                    *
+                    .18
+                    *
+                    devicePixelRatio,
+
+                vy:
+                    (Math.random()-.5)
+                    *
+                    .18
+                    *
+                    devicePixelRatio,
+
+                r:
+                    Math.random()+.3
+
+            })
+        );
+
+}
+
+
+function drawParticles(){
+
+    ctx.clearRect(
+        0,
+        0,
+        W,
+        H
+    );
+
+
+    ctx.fillStyle =
+        "rgba(130,230,255,.65)";
+
+
+    for(
+        const particle
+        of particles
+    ){
+
+        particle.x +=
+            particle.vx;
+
+        particle.y +=
+            particle.vy;
+
+
+        if(
+            particle.x < 0
+        ){
+
+            particle.x = W;
+
+        }
+
+
+        if(
+            particle.x > W
+        ){
+
+            particle.x = 0;
+
+        }
+
+
+        if(
+            particle.y < 0
+        ){
+
+            particle.y = H;
+
+        }
+
+
+        if(
+            particle.y > H
+        ){
+
+            particle.y = 0;
+
+        }
+
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+            particle.x,
+            particle.y,
+            particle.r *
+                devicePixelRatio,
+            0,
+            Math.PI*2
+        );
+
+
+        ctx.fill();
+
+    }
+
+
+    requestAnimationFrame(
+        drawParticles
+    );
+
+}
+
+
+window.addEventListener(
+    "resize",
+    resizeCanvas
+);
+
+
+resizeCanvas();
+
+drawParticles();
+
+renderBrain();
+
+</script>
+
+</body>
+      </html>
