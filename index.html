@@ -1,21 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
   <meta charset="UTF-8">
-
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
   >
 
-  <meta name="theme-color" content="#020609">
-
-  <title>JARVIS — Official Intelligence System</title>
+  <title>JARVIS — OFFICIAL V3</title>
 
   <style>
-
     * {
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
@@ -24,807 +18,435 @@
     html,
     body {
       margin: 0;
+      padding: 0;
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background: #020609;
+      background: #02070b;
       color: #dffcff;
       font-family: Arial, Helvetica, sans-serif;
     }
 
     body {
-      position: fixed;
-      inset: 0;
-    }
-
-    button {
-      font: inherit;
+      position: relative;
+      user-select: none;
     }
 
     #app {
       position: fixed;
       inset: 0;
       overflow: hidden;
-
       background:
-        radial-gradient(
-          circle at 50% 45%,
-          rgba(0, 220, 255, 0.08),
-          transparent 32%
-        ),
-        #020609;
+        radial-gradient(circle at center, rgba(0, 210, 255, 0.09), transparent 35%),
+        linear-gradient(180deg, #02070b, #000204);
     }
-
-    /* =====================================================
-       FUNDO
-    ===================================================== */
 
     .grid {
       position: absolute;
       inset: 0;
-
-      opacity: .20;
-
+      pointer-events: none;
+      opacity: .18;
       background-image:
-        linear-gradient(
-          rgba(0, 220, 255, .05) 1px,
-          transparent 1px
-        ),
-        linear-gradient(
-          90deg,
-          rgba(0, 220, 255, .05) 1px,
-          transparent 1px
-        );
-
+        linear-gradient(rgba(0, 220, 255, .12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 220, 255, .12) 1px, transparent 1px);
       background-size: 42px 42px;
-
-      transform:
-        perspective(500px)
-        rotateX(55deg)
-        scale(1.6);
-
-      transform-origin: center bottom;
-
-      pointer-events: none;
+      mask-image: radial-gradient(circle, black, transparent 80%);
     }
 
-    .scanlines {
+    .topbar {
       position: absolute;
-      inset: 0;
-
-      pointer-events: none;
-
-      opacity: .12;
-
-      background:
-        repeating-linear-gradient(
-          to bottom,
-          transparent 0,
-          transparent 3px,
-          rgba(255,255,255,.025) 4px
-        );
-
-      z-index: 2;
-    }
-
-    #stars {
-      position: absolute;
-      inset: 0;
-
-      z-index: 1;
-
-      pointer-events: none;
-    }
-
-    /* =====================================================
-       HEADER
-    ===================================================== */
-
-    header {
-
-      position: absolute;
-
       top: 0;
       left: 0;
       right: 0;
-
-      height: 94px;
-
-      z-index: 20;
-
+      height: 72px;
       display: flex;
-
       align-items: center;
-
       justify-content: space-between;
-
-      padding: 0 22px;
-
-      border-bottom:
-        1px solid rgba(0,220,255,.14);
-
-      background:
-        rgba(1,7,10,.80);
-
-      backdrop-filter: blur(12px);
+      padding: 0 20px;
+      z-index: 10;
+      border-bottom: 1px solid rgba(0, 225, 255, .16);
+      background: rgba(0, 5, 9, .55);
+      backdrop-filter: blur(10px);
     }
 
     .brand {
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 3px;
     }
 
-    .brand-main {
-
-      font-size: 22px;
-
-      font-weight: 700;
-
-      letter-spacing: 9px;
+    .brand-title {
+      color: #eaffff;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 4px;
     }
 
     .brand-sub {
-
-      color: #078aa3;
-
+      color: #5edff7;
       font-size: 9px;
-
-      letter-spacing: 4px;
-    }
-
-    .connection {
-
-      display: flex;
-
-      align-items: center;
-
-      gap: 9px;
-
-      font-size: 10px;
-
       letter-spacing: 3px;
     }
 
-    .connection-dot {
-
-      width: 10px;
-      height: 10px;
-
-      border-radius: 50%;
-
-      background: #00e5ff;
-
-      box-shadow:
-        0 0 8px #00e5ff,
-        0 0 20px rgba(0,229,255,.7);
+    .status-box {
+      text-align: right;
     }
 
-    .connection.offline .connection-dot {
-
-      background: #777;
-
-      box-shadow: none;
-    }
-
-    /* =====================================================
-       MAIN
-    ===================================================== */
-
-    main {
-
-      position: absolute;
-
-      z-index: 5;
-
-      inset: 94px 0 92px;
-
-      display: flex;
-
-      flex-direction: column;
-
-      align-items: center;
-
-      justify-content: center;
-    }
-
-    .system-state {
-
-      position: absolute;
-
-      top: 46px;
-
+    #mainStatus {
+      color: #63e8ff;
       font-size: 11px;
-
-      letter-spacing: 7px;
-
-      color:
-        rgba(190,239,248,.65);
-    }
-
-    /* =====================================================
-       CÉREBRO
-    ===================================================== */
-
-    .brain-wrap {
-
-      position: relative;
-
-      width: min(76vw,430px);
-
-      height: min(76vw,430px);
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: center;
-    }
-
-    .brain-glow {
-
-      position: absolute;
-
-      width: 65%;
-      height: 65%;
-
-      border-radius: 50%;
-
-      background:
-        rgba(0,220,255,.08);
-
-      filter: blur(35px);
-
-      animation:
-        glow 2.8s ease-in-out infinite;
-    }
-
-    .ring {
-
-      position: absolute;
-
-      border-radius: 50%;
-
-      border:
-        1px solid rgba(0,221,255,.22);
-    }
-
-    .r1 {
-
-      width: 72%;
-      height: 72%;
-
-      animation:
-        rotate 16s linear infinite;
-    }
-
-    .r2 {
-
-      width: 58%;
-      height: 58%;
-
-      border-style: dashed;
-
-      opacity: .55;
-
-      animation:
-        rotateReverse 11s linear infinite;
-    }
-
-    .r3 {
-
-      width: 44%;
-      height: 44%;
-
-      border-style: dashed;
-
-      opacity: .4;
-
-      animation:
-        rotate 7s linear infinite;
-    }
-
-    .core {
-
-      position: absolute;
-
-      width: 17%;
-      height: 17%;
-
-      border-radius: 50%;
-
-      border:
-        1px solid #00eaff;
-
-      background:
-        rgba(0,30,38,.65);
-
-      box-shadow:
-        0 0 15px rgba(0,234,255,.7),
-        inset 0 0 20px rgba(0,234,255,.18);
-
-      animation:
-        pulse 1.8s ease-in-out infinite;
-    }
-
-    #particles {
-
-      position: absolute;
-
-      width: 100%;
-      height: 100%;
-
-      pointer-events: none;
-    }
-
-    .particle {
-
-      position: absolute;
-
-      border-radius: 50%;
-
-      background: #00dfff;
-
-      box-shadow:
-        0 0 8px #00dfff;
-
-      opacity: .75;
-    }
-
-    /* =====================================================
-       STATUS
-    ===================================================== */
-
-    .voice-status {
-
-      margin-top: 10px;
-
-      text-align: center;
-
-      width: 90%;
-    }
-
-    .voice-main {
-
-      font-size: 17px;
-
-      letter-spacing: 4px;
-
-      color: #00dfff;
-
-      text-shadow:
-        0 0 12px rgba(0,223,255,.5);
-    }
-
-    .voice-main.waiting {
-
-      color: #9aacb2;
-
-      text-shadow: none;
-    }
-
-    .voice-main.error {
-
-      color: #ff6262;
-
-      text-shadow:
-        0 0 12px rgba(255,70,70,.4);
-    }
-
-    .voice-sub {
-
-      margin-top: 14px;
-
-      min-height: 20px;
-
-      color: #81939a;
-
-      font-size: 13px;
-    }
-
-    /* =====================================================
-       BARRAS DE ÁUDIO
-    ===================================================== */
-
-    .audio-level {
-
-      position: absolute;
-
-      bottom: 60px;
-
-      height: 25px;
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: center;
-
-      gap: 4px;
-    }
-
-    .audio-bar {
-
-      width: 3px;
-
-      height: 5px;
-
-      border-radius: 5px;
-
-      background: #00dfff;
-
-      opacity: .45;
-
-      transition: height .08s linear;
-    }
-
-    /* =====================================================
-       FOOTER
-    ===================================================== */
-
-    footer {
-
-      position: absolute;
-
-      z-index: 30;
-
-      bottom: 0;
-
-      left: 0;
-      right: 0;
-
-      height: 92px;
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: center;
-
-      padding: 12px 18px;
-
-      border-top:
-        1px solid rgba(0,220,255,.12);
-
-      background:
-        rgba(1,7,10,.90);
-
-      backdrop-filter: blur(15px);
-    }
-
-    .nav {
-
-      width: min(100%,350px);
-
-      height: 58px;
-
-      display: flex;
-
-      overflow: hidden;
-
-      border:
-        1px solid rgba(0,220,255,.13);
-
-      border-radius: 20px;
-
-      background:
-        rgba(0,18,23,.65);
-    }
-
-    .nav button {
-
-      flex: 1;
-
-      border: 0;
-
-      background: transparent;
-
-      color: #6d8389;
-
-      letter-spacing: 3px;
-
-      font-size: 10px;
-    }
-
-    .nav button.active {
-
-      color: #00dfff;
-
-      background:
-        rgba(0,220,255,.06);
-    }
-
-    /* =====================================================
-       BRAIN PANEL
-    ===================================================== */
-
-    #brainPanel {
-
-      position: absolute;
-
-      z-index: 50;
-
-      inset: 94px 0 92px;
-
-      display: none;
-
-      padding: 20px;
-
-      overflow-y: auto;
-
-      background:
-        rgba(1,7,10,.98);
-    }
-
-    #brainPanel.open {
-      display: block;
-    }
-
-    .brain-title {
-
-      font-size: 18px;
-
-      letter-spacing: 5px;
-
-      margin-bottom: 5px;
-    }
-
-    .brain-subtitle {
-
-      color: #61777d;
-
-      font-size: 11px;
-
-      margin-bottom: 20px;
-    }
-
-    .stats {
-
-      display: grid;
-
-      grid-template-columns:
-        repeat(2,1fr);
-
-      gap: 10px;
-    }
-
-    .stat {
-
-      padding: 15px;
-
-      border:
-        1px solid rgba(0,220,255,.13);
-
-      border-radius: 14px;
-
-      background:
-        rgba(0,22,28,.65);
-    }
-
-    .stat-label {
-
-      color: #637a81;
-
-      font-size: 9px;
-
+      font-weight: bold;
       letter-spacing: 2px;
     }
 
-    .stat-value {
-
-      margin-top: 8px;
-
-      font-size: 22px;
-
-      color: #00dfff;
+    #subStatus {
+      margin-top: 4px;
+      color: #587984;
+      font-size: 8px;
+      letter-spacing: 1px;
     }
 
-    .knowledge-section {
-
-      margin-top: 20px;
-    }
-
-    .knowledge-section h3 {
-
-      font-size: 10px;
-
-      letter-spacing: 3px;
-
-      font-weight: 400;
-
-      color: #71878d;
-    }
-
-    .knowledge-list {
-
+    .center {
+      position: absolute;
+      inset: 72px 0 100px;
       display: flex;
-
-      flex-direction: column;
-
-      gap: 7px;
+      justify-content: center;
+      align-items: center;
     }
 
-    .knowledge-item {
-
-      padding: 10px 12px;
-
-      border-left:
-        2px solid #00dfff;
-
-      background:
-        rgba(0,220,255,.035);
-
-      color: #b5c8cd;
-
-      font-size: 11px;
+    .brain-area {
+      position: relative;
+      width: min(72vw, 460px);
+      height: min(72vw, 460px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .close-brain {
-
-      margin-top: 20px;
-
-      width: 100%;
-
-      padding: 13px;
-
-      border-radius: 12px;
-
-      border:
-        1px solid rgba(0,220,255,.2);
-
-      background:
-        rgba(0,220,255,.05);
-
-      color: #00dfff;
-
-      letter-spacing: 3px;
-
-      font-size: 10px;
+    .ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 222, 255, .24);
+      box-shadow:
+        0 0 25px rgba(0, 200, 255, .06),
+        inset 0 0 25px rgba(0, 200, 255, .04);
     }
 
-    /* =====================================================
-       TOAST
-    ===================================================== */
-
-    #toast {
-
-      position: fixed;
-
-      z-index: 100;
-
-      left: 50%;
-
-      bottom: 108px;
-
-      transform:
-        translateX(-50%)
-        translateY(20px);
-
-      width: calc(100% - 40px);
-
-      max-width: 400px;
-
-      padding: 13px 16px;
-
-      text-align: center;
-
-      border:
-        1px solid rgba(0,220,255,.18);
-
-      border-radius: 13px;
-
-      background:
-        rgba(0,15,20,.95);
-
-      color: #b5cbd0;
-
-      font-size: 11px;
-
-      opacity: 0;
-
-      pointer-events: none;
-
-      transition: .25s;
+    .ring.one {
+      width: 96%;
+      height: 96%;
+      animation: rotate 24s linear infinite;
     }
 
-    #toast.show {
-
-      opacity: 1;
-
-      transform:
-        translateX(-50%)
-        translateY(0);
+    .ring.two {
+      width: 77%;
+      height: 77%;
+      border-style: dashed;
+      animation: rotateReverse 18s linear infinite;
     }
 
-    /* =====================================================
-       ANIMAÇÕES
-    ===================================================== */
+    .ring.three {
+      width: 58%;
+      height: 58%;
+      border-color: rgba(0, 238, 255, .4);
+      animation: pulse 2.8s ease-in-out infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes rotateReverse {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0); }
+    }
 
     @keyframes pulse {
+      0%, 100% {
+        transform: scale(.96);
+        opacity: .55;
+      }
 
-      0%,100% {
-        transform: scale(.88);
+      50% {
+        transform: scale(1.04);
+        opacity: 1;
+      }
+    }
+
+    #brainCanvas {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .core {
+      position: absolute;
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle,
+          rgba(170, 250, 255, .95) 0%,
+          rgba(0, 200, 255, .45) 20%,
+          rgba(0, 100, 160, .12) 52%,
+          transparent 70%);
+      box-shadow:
+        0 0 25px rgba(0, 220, 255, .7),
+        0 0 70px rgba(0, 160, 255, .3);
+      animation: corePulse 1.8s ease-in-out infinite;
+    }
+
+    .core::after {
+      content: "";
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #d9ffff;
+      box-shadow:
+        0 0 10px #bfffff,
+        0 0 30px #00dfff;
+    }
+
+    @keyframes corePulse {
+      0%, 100% {
+        transform: scale(.94);
       }
 
       50% {
         transform: scale(1.08);
       }
-
     }
 
-    @keyframes glow {
+    .mic-state {
+      position: absolute;
+      bottom: 18%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      min-width: 190px;
+      padding: 10px 18px;
+      text-align: center;
+      border: 1px solid rgba(0, 225, 255, .25);
+      border-radius: 999px;
+      background: rgba(0, 10, 15, .65);
+      backdrop-filter: blur(8px);
+    }
 
-      0%,100% {
-        transform: scale(.9);
-        opacity: .5;
-      }
+    #micText {
+      color: #71edff;
+      font-size: 10px;
+      letter-spacing: 2px;
+      font-weight: bold;
+    }
 
+    #heardText {
+      margin-top: 5px;
+      color: #52727a;
+      font-size: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 250px;
+    }
+
+    .bottom {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      min-height: 100px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      z-index: 10;
+      background: rgba(0, 5, 9, .75);
+      border-top: 1px solid rgba(0, 225, 255, .15);
+      backdrop-filter: blur(12px);
+    }
+
+    .stat {
+      flex: 1;
+      text-align: center;
+    }
+
+    .stat-label {
+      color: #45636b;
+      font-size: 7px;
+      letter-spacing: 2px;
+    }
+
+    .stat-value {
+      margin-top: 4px;
+      color: #72eaff;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    #voiceButton {
+      width: 58px;
+      height: 58px;
+      flex: 0 0 58px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 230, 255, .5);
+      background: radial-gradient(
+        circle,
+        rgba(0, 225, 255, .25),
+        rgba(0, 25, 35, .8)
+      );
+      color: #8ff5ff;
+      font-size: 21px;
+      box-shadow: 0 0 25px rgba(0, 220, 255, .16);
+    }
+
+    #voiceButton.active {
+      box-shadow:
+        0 0 20px rgba(0, 230, 255, .55),
+        0 0 55px rgba(0, 180, 255, .25);
+      animation: buttonPulse 1.2s infinite;
+    }
+
+    @keyframes buttonPulse {
       50% {
-        transform: scale(1.12);
-        opacity: .9;
+        transform: scale(1.08);
       }
-
     }
 
-    @keyframes rotate {
-
-      from {
-        transform: rotate(0deg);
-      }
-
-      to {
-        transform: rotate(360deg);
-      }
-
+    .brain-panel {
+      position: absolute;
+      inset: 0;
+      z-index: 30;
+      display: none;
+      background:
+        radial-gradient(circle at center, rgba(0, 180, 220, .1), transparent 50%),
+        #010509;
+      padding: 25px;
+      overflow-y: auto;
     }
 
-    @keyframes rotateReverse {
+    .brain-panel.open {
+      display: block;
+    }
 
-      from {
-        transform: rotate(360deg);
-      }
+    .brain-title {
+      color: #7ff2ff;
+      font-size: 21px;
+      font-weight: bold;
+      letter-spacing: 3px;
+    }
 
-      to {
-        transform: rotate(0deg);
-      }
+    .brain-sub {
+      color: #54747c;
+      font-size: 9px;
+      margin-top: 6px;
+      letter-spacing: 1px;
+    }
 
+    .close-brain {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 225, 255, .3);
+      background: rgba(0, 20, 28, .8);
+      color: #7ff2ff;
+      font-size: 18px;
+    }
+
+    .brain-grid {
+      margin-top: 35px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .brain-card {
+      padding: 18px;
+      border: 1px solid rgba(0, 220, 255, .16);
+      border-radius: 14px;
+      background: rgba(0, 20, 28, .55);
+    }
+
+    .brain-card small {
+      color: #4c6c74;
+      font-size: 8px;
+      letter-spacing: 1px;
+    }
+
+    .brain-card strong {
+      display: block;
+      margin-top: 7px;
+      color: #7defff;
+      font-size: 26px;
+    }
+
+    .brain-log {
+      margin-top: 20px;
+      padding: 18px;
+      border: 1px solid rgba(0, 220, 255, .13);
+      border-radius: 14px;
+      background: rgba(0, 12, 18, .65);
+    }
+
+    .brain-log-title {
+      color: #65e8ff;
+      font-size: 10px;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    #brainLog {
+      color: #7799a1;
+      font-size: 10px;
+      line-height: 1.8;
+      white-space: pre-wrap;
+    }
+
+    .diagnostic {
+      position: absolute;
+      top: 82px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 15;
+      max-width: 90%;
+      text-align: center;
+      color: #31535c;
+      font-size: 8px;
+      letter-spacing: 1px;
+      pointer-events: none;
     }
 
     @media (orientation: landscape) {
-
-      header {
-        height: 70px;
+      .topbar {
+        height: 60px;
       }
 
-      main {
-        inset: 70px 0 70px;
+      .center {
+        inset: 60px 0 82px;
       }
 
-      footer {
-        height: 70px;
+      .brain-area {
+        width: min(62vh, 430px);
+        height: min(62vh, 430px);
       }
 
-      #brainPanel {
-        inset: 70px 0 70px;
+      .bottom {
+        min-height: 82px;
       }
 
-      .brain-wrap {
-
-        width: min(55vh,420px);
-
-        height: min(55vh,420px);
+      .mic-state {
+        bottom: 12%;
       }
-
-      .system-state {
-        top: 15px;
-      }
-
     }
-
   </style>
-
 </head>
-
 
 <body>
 
@@ -832,594 +454,277 @@
 
   <div class="grid"></div>
 
-  <div class="scanlines"></div>
-
-  <canvas id="stars"></canvas>
-
-
-  <!-- HEADER -->
-
-  <header>
-
+  <header class="topbar">
     <div class="brand">
-
-      <div class="brand-main">
-        JARVIS
-      </div>
-
-      <div class="brand-sub">
-        OFFICIAL INTELLIGENCE SYSTEM
-      </div>
-
+      <div class="brand-title">JARVIS</div>
+      <div class="brand-sub">OFFICIAL ARTIFICIAL INTELLIGENCE</div>
     </div>
 
-
-    <div
-      id="connection"
-      class="connection"
-    >
-
-      <span class="connection-dot"></span>
-
-      <span id="connectionText">
-        LOCAL
-      </span>
-
+    <div class="status-box">
+      <div id="mainStatus">INICIANDO</div>
+      <div id="subStatus">PREPARANDO NÚCLEO</div>
     </div>
-
   </header>
 
+  <div class="diagnostic" id="diagnostic">
+    SISTEMA V3
+  </div>
 
-  <!-- MAIN -->
+  <main class="center">
 
-  <main id="main">
+    <div class="brain-area">
 
-    <div class="system-state">
-      SISTEMA ONLINE
-    </div>
+      <div class="ring one"></div>
+      <div class="ring two"></div>
+      <div class="ring three"></div>
 
-
-    <div class="brain-wrap">
-
-      <div class="brain-glow"></div>
-
-      <div class="ring r1"></div>
-
-      <div class="ring r2"></div>
-
-      <div class="ring r3"></div>
-
-      <div id="particles"></div>
+      <canvas id="brainCanvas"></canvas>
 
       <div class="core"></div>
 
-    </div>
-
-
-    <div class="voice-status">
-
-      <div
-        id="voiceMain"
-        class="voice-main waiting"
-      >
-        PREPARANDO
-      </div>
-
-
-      <div
-        id="voiceSub"
-        class="voice-sub"
-      >
-        Inicializando sistema de voz...
+      <div class="mic-state">
+        <div id="micText">MICROFONE: INICIANDO</div>
+        <div id="heardText">Aguardando reconhecimento de voz</div>
       </div>
 
     </div>
-
-
-    <div
-      id="audioLevel"
-      class="audio-level"
-    ></div>
 
   </main>
 
+  <footer class="bottom">
 
-  <!-- CÉREBRO -->
-
-  <section id="brainPanel">
-
-    <div class="brain-title">
-      CÉREBRO DO JARVIS
+    <div class="stat">
+      <div class="stat-label">MEMÓRIA</div>
+      <div class="stat-value" id="statMemory">0</div>
     </div>
 
-    <div class="brain-subtitle">
-      MEMÓRIA • APRENDIZADO • SESSÕES • EVOLUÇÃO
+    <div class="stat">
+      <div class="stat-label">CONHECIMENTO</div>
+      <div class="stat-value" id="statKnowledge">0</div>
     </div>
 
-
-    <div class="stats">
-
-      <div class="stat">
-
-        <div class="stat-label">
-          SESSÕES
-        </div>
-
-        <div
-          id="statSessions"
-          class="stat-value"
-        >
-          0
-        </div>
-
-      </div>
-
-
-      <div class="stat">
-
-        <div class="stat-label">
-          PERGUNTAS
-        </div>
-
-        <div
-          id="statQuestions"
-          class="stat-value"
-        >
-          0
-        </div>
-
-      </div>
-
-
-      <div class="stat">
-
-        <div class="stat-label">
-          RESPOSTAS
-        </div>
-
-        <div
-          id="statAnswers"
-          class="stat-value"
-        >
-          0
-        </div>
-
-      </div>
-
-
-      <div class="stat">
-
-        <div class="stat-label">
-          CONHECIDOS
-        </div>
-
-        <div
-          id="statKnown"
-          class="stat-value"
-        >
-          0
-        </div>
-
-      </div>
-
-
-      <div class="stat">
-
-        <div class="stat-label">
-          APRENDIDOS
-        </div>
-
-        <div
-          id="statLearned"
-          class="stat-value"
-        >
-          0
-        </div>
-
-      </div>
-
-
-      <div class="stat">
-
-        <div class="stat-label">
-          APRENDENDO
-        </div>
-
-        <div
-          id="statLearning"
-          class="stat-value"
-        >
-          0
-        </div>
-
-      </div>
-
-
-      <div class="stat">
-
-        <div class="stat-label">
-          DESCONHECIDOS
-        </div>
-
-        <div
-          id="statUnknown"
-          class="stat-value"
-        >
-          0
-        </div>
-
-      </div>
-
-
-      <div class="stat">
-
-        <div class="stat-label">
-          PESSOAL
-        </div>
-
-        <div
-          id="statPersonal"
-          class="stat-value"
-        >
-          0
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <div class="knowledge-section">
-
-      <h3>
-        CONHECIMENTO CONHECIDO
-      </h3>
-
-      <div
-        id="knownList"
-        class="knowledge-list"
-      ></div>
-
-    </div>
-
-
-    <div class="knowledge-section">
-
-      <h3>
-        CONHECIMENTO APRENDIDO
-      </h3>
-
-      <div
-        id="learnedList"
-        class="knowledge-list"
-      ></div>
-
-    </div>
-
-
-    <div class="knowledge-section">
-
-      <h3>
-        EM APRENDIZADO
-      </h3>
-
-      <div
-        id="learningList"
-        class="knowledge-list"
-      ></div>
-
-    </div>
-
-
-    <div class="knowledge-section">
-
-      <h3>
-        DESCONHECIDO
-      </h3>
-
-      <div
-        id="unknownList"
-        class="knowledge-list"
-      ></div>
-
-    </div>
-
-
-    <button
-      id="closeBrain"
-      class="close-brain"
-    >
-      VOLTAR AO JARVIS
+    <button id="voiceButton" type="button">
+      🎙
     </button>
 
-  </section>
+    <div class="stat">
+      <div class="stat-label">SESSÃO</div>
+      <div class="stat-value" id="statSession">1</div>
+    </div>
 
-
-  <!-- FOOTER -->
-
-  <footer>
-
-    <div class="nav">
-
-      <button
-        id="brainButton"
-        class="active"
-      >
-        🧠 CÉREBRO
-      </button>
-
-
-      <button id="voiceButton">
-        🎙 VOZ
-      </button>
-
-
-      <button id="clearButton">
-        LIMPAR
-      </button>
-
+    <div class="stat">
+      <div class="stat-label">STATUS</div>
+      <div class="stat-value" id="statOnline">OFFLINE</div>
     </div>
 
   </footer>
 
+  <section class="brain-panel" id="brainPanel">
 
-  <div id="toast"></div>
+    <button class="close-brain" id="closeBrain">
+      ×
+    </button>
+
+    <div class="brain-title">
+      JARVIS BRAIN
+    </div>
+
+    <div class="brain-sub">
+      ANÁLISE DE CONHECIMENTO • MEMÓRIA • EVOLUÇÃO
+    </div>
+
+    <div class="brain-grid">
+
+      <div class="brain-card">
+        <small>CONHECIDO</small>
+        <strong id="brainKnown">0</strong>
+      </div>
+
+      <div class="brain-card">
+        <small>APRENDIDO</small>
+        <strong id="brainLearned">0</strong>
+      </div>
+
+      <div class="brain-card">
+        <small>APRENDENDO</small>
+        <strong id="brainLearning">0</strong>
+      </div>
+
+      <div class="brain-card">
+        <small>DESCONHECIDO</small>
+        <strong id="brainUnknown">0</strong>
+      </div>
+
+    </div>
+
+    <div class="brain-log">
+      <div class="brain-log-title">
+        EVOLUÇÃO DA SESSÃO
+      </div>
+
+      <div id="brainLog">
+        Sistema aguardando dados...
+      </div>
+    </div>
+
+  </section>
 
 </div>
 
 
 <script>
 
-"use strict";
+/* =========================================================
+   JARVIS OFFICIAL V3
+   ========================================================= */
+
+const OWNER_NAME = "Fernando";
+
+const MEMORY_KEY =
+  "JARVIS_OFFICIAL_MEMORY_V3";
+
+const KNOWLEDGE_KEY =
+  "JARVIS_OFFICIAL_KNOWLEDGE_V3";
+
+const SESSION_KEY =
+  "JARVIS_OFFICIAL_SESSION_V3";
 
 
-/* ============================================================
-   CONFIGURAÇÃO
-============================================================ */
-
-const OWNER_NAME =
-  "Fernando";
-
-
-/* ============================================================
+/* =========================================================
    ELEMENTOS
-============================================================ */
+   ========================================================= */
 
-const voiceMain =
-  document.getElementById(
-    "voiceMain"
-  );
+const mainStatus =
+  document.getElementById("mainStatus");
 
-const voiceSub =
-  document.getElementById(
-    "voiceSub"
-  );
+const subStatus =
+  document.getElementById("subStatus");
 
-const connection =
-  document.getElementById(
-    "connection"
-  );
+const micText =
+  document.getElementById("micText");
 
-const connectionText =
-  document.getElementById(
-    "connectionText"
-  );
+const heardText =
+  document.getElementById("heardText");
 
-const main =
-  document.getElementById(
-    "main"
-  );
-
-const brainPanel =
-  document.getElementById(
-    "brainPanel"
-  );
-
-const brainButton =
-  document.getElementById(
-    "brainButton"
-  );
+const diagnostic =
+  document.getElementById("diagnostic");
 
 const voiceButton =
-  document.getElementById(
-    "voiceButton"
-  );
+  document.getElementById("voiceButton");
 
-const clearButton =
-  document.getElementById(
-    "clearButton"
-  );
+const brainPanel =
+  document.getElementById("brainPanel");
 
 const closeBrain =
-  document.getElementById(
-    "closeBrain"
-  );
+  document.getElementById("closeBrain");
 
-const toast =
-  document.getElementById(
-    "toast"
-  );
+const statMemory =
+  document.getElementById("statMemory");
 
-const particles =
-  document.getElementById(
-    "particles"
-  );
+const statKnowledge =
+  document.getElementById("statKnowledge");
 
-const audioLevel =
-  document.getElementById(
-    "audioLevel"
-  );
+const statSession =
+  document.getElementById("statSession");
+
+const statOnline =
+  document.getElementById("statOnline");
+
+const brainKnown =
+  document.getElementById("brainKnown");
+
+const brainLearned =
+  document.getElementById("brainLearned");
+
+const brainLearning =
+  document.getElementById("brainLearning");
+
+const brainUnknown =
+  document.getElementById("brainUnknown");
+
+const brainLog =
+  document.getElementById("brainLog");
 
 
-/* ============================================================
+/* =========================================================
    ESTADO
-============================================================ */
+   ========================================================= */
 
 let recognition = null;
 
-let recognitionSupported =
-  false;
+let recognitionRunning = false;
 
-let recognitionRunning =
-  false;
+let startingRecognition = false;
 
-let starting =
-  false;
+let shouldListen = true;
 
-let shouldListen =
-  true;
+let processing = false;
 
-let speaking =
-  false;
+let speaking = false;
 
-let processing =
-  false;
+let restarting = false;
 
-let restartTimer =
-  null;
+let watchdogTimer = null;
 
-let lastTranscript =
-  "";
+let restartTimer = null;
 
-let lastTranscriptTime =
-  0;
+let touchUnlocked = false;
 
-let microphoneStream =
-  null;
+let lastTranscript = "";
 
-let audioContext =
-  null;
+let session = loadSession();
 
-let analyser =
-  null;
+let memory = loadMemory();
 
-let audioAnimation =
-  null;
+let knowledge = loadKnowledge();
 
 
-/* ============================================================
-   STORAGE
-============================================================ */
-
-const MEMORY_KEY =
-  "JARVIS_OFFICIAL_MEMORY_V2";
-
-const KNOWLEDGE_KEY =
-  "JARVIS_OFFICIAL_KNOWLEDGE_V2";
-
-const SESSION_KEY =
-  "JARVIS_OFFICIAL_SESSION_V2";
-
-
-/* ============================================================
+/* =========================================================
    STATUS
-============================================================ */
+   ========================================================= */
 
-function setStatus(
-  title,
-  subtitle,
-  type = "normal"
-) {
+function setStatus(main, sub) {
 
-  voiceMain.textContent =
-    title;
+  mainStatus.textContent =
+    String(main || "").toUpperCase();
 
-  voiceSub.textContent =
-    subtitle;
-
-  voiceMain.className =
-    "voice-main";
-
-  if (type === "waiting") {
-
-    voiceMain.classList.add(
-      "waiting"
-    );
-
-  }
-
-  if (type === "error") {
-
-    voiceMain.classList.add(
-      "error"
-    );
-
-  }
+  subStatus.textContent =
+    String(sub || "").toUpperCase();
 
 }
 
 
-/* ============================================================
-   TOAST
-============================================================ */
+function setMic(text) {
 
-function showToast(
-  message
-) {
-
-  toast.textContent =
-    message;
-
-  toast.classList.add(
-    "show"
-  );
-
-  setTimeout(
-    () => {
-
-      toast.classList.remove(
-        "show"
-      );
-
-    },
-    2300
-  );
+  micText.textContent =
+    String(text || "").toUpperCase();
 
 }
 
 
-/* ============================================================
-   NORMALIZAÇÃO
-============================================================ */
+function setDiagnostic(text) {
 
-function normalize(
-  text
-) {
-
-  return String(text || "")
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(
-      /[\u0300-\u036f]/g,
-      ""
-    )
-    .replace(
-      /[!?.,;:()[\]{}]/g,
-      " "
-    )
-    .replace(
-      /\s+/g,
-      " "
-    )
-    .trim();
+  diagnostic.textContent =
+    String(text || "").toUpperCase();
 
 }
 
 
-/* ============================================================
-   MEMÓRIA
-============================================================ */
+/* =========================================================
+   LOCAL STORAGE
+   ========================================================= */
 
 function loadMemory() {
 
   try {
 
+    const saved =
+      localStorage.getItem(MEMORY_KEY);
+
+    if (!saved) return [];
+
     const data =
-      JSON.parse(
-        localStorage.getItem(
-          MEMORY_KEY
-        ) || "[]"
-      );
+      JSON.parse(saved);
 
     return Array.isArray(data)
       ? data
@@ -1434,196 +739,217 @@ function loadMemory() {
 }
 
 
-function saveMemory(
-  memory
-) {
+function saveMemory() {
 
-  localStorage.setItem(
-    MEMORY_KEY,
-    JSON.stringify(
-      memory.slice(-100)
-    )
-  );
+  try {
 
-}
-
-
-function remember(
-  text
-) {
-
-  const memory =
-    loadMemory();
-
-  memory.push({
-
-    text:
-      String(text),
-
-    createdAt:
-      new Date().toISOString()
-
-  });
-
-  saveMemory(
-    memory
-  );
-
-}
-
-
-function memoryForAPI() {
-
-  return loadMemory()
-    .slice(-30)
-    .map(
-      item =>
-        item.text
+    localStorage.setItem(
+      MEMORY_KEY,
+      JSON.stringify(memory)
     );
 
+  } catch {}
+
 }
 
-
-/* ============================================================
-   CONHECIMENTO
-============================================================ */
 
 function loadKnowledge() {
 
   try {
 
     const saved =
-      localStorage.getItem(
-        KNOWLEDGE_KEY
-      );
+      localStorage.getItem(KNOWLEDGE_KEY);
 
-    if (saved) {
-
-      const data =
-        JSON.parse(saved);
+    if (!saved) {
 
       return {
-
-        known:
-          Array.isArray(data.known)
-            ? data.known
-            : [],
-
-        learned:
-          Array.isArray(data.learned)
-            ? data.learned
-            : [],
-
-        learning:
-          Array.isArray(data.learning)
-            ? data.learning
-            : [],
-
-        unknown:
-          Array.isArray(data.unknown)
-            ? data.unknown
-            : [],
-
-        personal:
-          Array.isArray(data.personal)
-            ? data.personal
-            : []
-
+        known: [],
+        learned: [],
+        learning: [],
+        unknown: []
       };
 
     }
 
+    const data =
+      JSON.parse(saved);
+
+    return {
+
+      known: Array.isArray(data.known)
+        ? data.known
+        : [],
+
+      learned: Array.isArray(data.learned)
+        ? data.learned
+        : [],
+
+      learning: Array.isArray(data.learning)
+        ? data.learning
+        : [],
+
+      unknown: Array.isArray(data.unknown)
+        ? data.unknown
+        : []
+
+    };
+
+  } catch {
+
+    return {
+      known: [],
+      learned: [],
+      learning: [],
+      unknown: []
+    };
+
+  }
+
+}
+
+
+function saveKnowledge() {
+
+  try {
+
+    localStorage.setItem(
+      KNOWLEDGE_KEY,
+      JSON.stringify(knowledge)
+    );
+
   } catch {}
 
-  const initial = {
+}
 
-    known: [
 
-      { topic: "programação" },
+function loadSession() {
 
-      { topic: "tecnologia" },
+  try {
 
-      {
-        topic:
-          "inteligência artificial"
-      },
+    const saved =
+      localStorage.getItem(SESSION_KEY);
 
-      { topic: "JavaScript" },
+    if (!saved) {
 
-      { topic: "HTML" },
+      const newSession = {
 
-      { topic: "CSS" },
+        id:
+          "JARVIS-" +
+          Date.now(),
 
-      {
-        topic:
-          "desenvolvimento web"
-      }
+        startedAt:
+          new Date().toISOString(),
 
-    ],
+        questions: 0,
 
-    learned: [],
+        answers: 0,
 
-    learning: [],
+        events: []
 
-    unknown: [],
+      };
 
-    personal: [
+      localStorage.setItem(
+        SESSION_KEY,
+        JSON.stringify(newSession)
+      );
 
-      {
-        topic: "proprietário",
-        value: OWNER_NAME
-      }
+      return newSession;
 
-    ]
+    }
 
-  };
+    return JSON.parse(saved);
 
-  localStorage.setItem(
-    KNOWLEDGE_KEY,
-    JSON.stringify(initial)
-  );
+  } catch {
 
-  return initial;
+    return {
+
+      id:
+        "JARVIS-" +
+        Date.now(),
+
+      startedAt:
+        new Date().toISOString(),
+
+      questions: 0,
+
+      answers: 0,
+
+      events: []
+
+    };
+
+  }
 
 }
 
 
-function saveKnowledge(
-  data
-) {
+function saveSession() {
 
-  localStorage.setItem(
-    KNOWLEDGE_KEY,
-    JSON.stringify(data)
-  );
+  try {
+
+    localStorage.setItem(
+      SESSION_KEY,
+      JSON.stringify(session)
+    );
+
+  } catch {}
 
 }
 
 
-function learnTopic(
-  topic
+function addSessionEvent(
+  type,
+  data = {}
 ) {
 
-  const data =
-    loadKnowledge();
+  session.events.push({
 
-  const value =
-    String(topic).trim();
+    type,
 
-  if (!value) return;
+    data,
+
+    timestamp:
+      new Date().toISOString()
+
+  });
+
+  saveSession();
+
+}
+
+
+/* =========================================================
+   BRAIN
+   ========================================================= */
+
+function normalize(value) {
+
+  return String(value || "")
+    .trim()
+    .toLowerCase();
+
+}
+
+
+function addKnown(topic) {
+
+  topic =
+    String(topic || "").trim();
+
+  if (!topic) return;
 
   const exists =
-    data.learned.some(
+    knowledge.known.some(
       item =>
         normalize(item.topic) ===
-        normalize(value)
+        normalize(topic)
     );
 
   if (!exists) {
 
-    data.learned.push({
+    knowledge.known.push({
 
-      topic: value,
+      topic,
 
       createdAt:
         new Date().toISOString()
@@ -1632,292 +958,246 @@ function learnTopic(
 
   }
 
-  data.learning =
-    data.learning.filter(
+  saveKnowledge();
+
+}
+
+
+function addLearned(
+  topic,
+  source = "user"
+) {
+
+  topic =
+    String(topic || "").trim();
+
+  if (!topic) return;
+
+  knowledge.learned.push({
+
+    topic,
+
+    source,
+
+    createdAt:
+      new Date().toISOString()
+
+  });
+
+  saveKnowledge();
+
+}
+
+
+function addLearning(topic) {
+
+  topic =
+    String(topic || "").trim();
+
+  if (!topic) return;
+
+  const exists =
+    knowledge.learning.some(
       item =>
-        normalize(item.topic) !==
-        normalize(value)
+        normalize(item.topic) ===
+        normalize(topic)
     );
 
-  saveKnowledge(
-    data
-  );
+  if (!exists) {
 
-  updateBrainPanel();
+    knowledge.learning.push({
 
-}
+      topic,
 
+      startedAt:
+        new Date().toISOString()
 
-/* ============================================================
-   SESSÃO
-============================================================ */
-
-function loadSession() {
-
-  try {
-
-    const saved =
-      localStorage.getItem(
-        SESSION_KEY
-      );
-
-    if (saved) {
-
-      return JSON.parse(
-        saved
-      );
-
-    }
-
-  } catch {}
-
-  const session = {
-
-    id:
-      "JARVIS-" +
-      Date.now(),
-
-    startedAt:
-      new Date().toISOString(),
-
-    questions: 0,
-
-    answers: 0
-
-  };
-
-  localStorage.setItem(
-    SESSION_KEY,
-    JSON.stringify(session)
-  );
-
-  return session;
-
-}
-
-
-function updateSession(
-  type
-) {
-
-  const session =
-    loadSession();
-
-  if (
-    type ===
-    "question"
-  ) {
-
-    session.questions++;
+    });
 
   }
 
-  if (
-    type ===
-    "answer"
-  ) {
+  saveKnowledge();
 
-    session.answers++;
+}
+
+
+function addUnknown(topic) {
+
+  topic =
+    String(topic || "").trim();
+
+  if (!topic) return;
+
+  const exists =
+    knowledge.unknown.some(
+      item =>
+        normalize(item.topic) ===
+        normalize(topic)
+    );
+
+  if (!exists) {
+
+    knowledge.unknown.push({
+
+      topic,
+
+      createdAt:
+        new Date().toISOString()
+
+    });
 
   }
 
-  localStorage.setItem(
-    SESSION_KEY,
-    JSON.stringify(session)
-  );
+  saveKnowledge();
 
 }
 
 
-/* ============================================================
-   BRAIN PANEL
-============================================================ */
+function updateBrainUI() {
 
-function escapeHTML(
-  text
-) {
+  statMemory.textContent =
+    memory.length;
 
-  return String(text)
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    );
-
-}
-
-
-function renderList(
-  id,
-  list
-) {
-
-  const element =
-    document.getElementById(
-      id
-    );
-
-  if (!list.length) {
-
-    element.innerHTML =
-      `<div class="knowledge-item">
-        Nenhum registro.
-      </div>`;
-
-    return;
-
-  }
-
-  element.innerHTML =
-    list
-      .slice(-20)
-      .reverse()
-      .map(
-        item => {
-
-          const text =
-            item.topic ||
-            item.value ||
-            "Registro";
-
-          return `
-            <div class="knowledge-item">
-              ${escapeHTML(text)}
-            </div>
-          `;
-
-        }
-      )
-      .join("");
-
-}
-
-
-function updateBrainPanel() {
-
-  const knowledge =
-    loadKnowledge();
-
-  const session =
-    loadSession();
-
-  document.getElementById(
-    "statSessions"
-  ).textContent = "1";
-
-  document.getElementById(
-    "statQuestions"
-  ).textContent =
-    session.questions;
-
-  document.getElementById(
-    "statAnswers"
-  ).textContent =
-    session.answers;
-
-  document.getElementById(
-    "statKnown"
-  ).textContent =
-    knowledge.known.length;
-
-  document.getElementById(
-    "statLearned"
-  ).textContent =
-    knowledge.learned.length;
-
-  document.getElementById(
-    "statLearning"
-  ).textContent =
+  const totalKnowledge =
+    knowledge.known.length +
+    knowledge.learned.length +
     knowledge.learning.length;
 
-  document.getElementById(
-    "statUnknown"
-  ).textContent =
+  statKnowledge.textContent =
+    totalKnowledge;
+
+  brainKnown.textContent =
+    knowledge.known.length;
+
+  brainLearned.textContent =
+    knowledge.learned.length;
+
+  brainLearning.textContent =
+    knowledge.learning.length;
+
+  brainUnknown.textContent =
     knowledge.unknown.length;
 
-  document.getElementById(
-    "statPersonal"
-  ).textContent =
-    knowledge.personal.length;
+  statSession.textContent =
+    session.questions;
 
-  renderList(
-    "knownList",
-    knowledge.known
-  );
+  brainLog.textContent =
 
-  renderList(
-    "learnedList",
-    knowledge.learned
-  );
+    "SESSÃO: " +
+    session.id +
+    "\n\n" +
 
-  renderList(
-    "learningList",
-    knowledge.learning
-  );
+    "PERGUNTAS: " +
+    session.questions +
+    "\n" +
 
-  renderList(
-    "unknownList",
-    knowledge.unknown
-  );
+    "RESPOSTAS: " +
+    session.answers +
+    "\n" +
+
+    "EVENTOS: " +
+    session.events.length +
+    "\n\n" +
+
+    "MEMÓRIAS: " +
+    memory.length +
+    "\n\n" +
+
+    "CONHECIMENTO CONHECIDO: " +
+    knowledge.known.length +
+    "\n" +
+
+    "CONHECIMENTO APRENDIDO: " +
+    knowledge.learned.length +
+    "\n" +
+
+    "EM APRENDIZADO: " +
+    knowledge.learning.length +
+    "\n" +
+
+    "DESCONHECIDO: " +
+    knowledge.unknown.length;
 
 }
 
 
-function openBrain() {
+/* =========================================================
+   BRAIN PANEL
+   ========================================================= */
 
-  main.style.display =
-    "none";
+function openBrainPanel() {
 
-  brainPanel.classList.add(
-    "open"
+  brainPanel.classList.add("open");
+
+  stopRecognition();
+
+  setStatus(
+    "CÉREBRO",
+    "ANÁLISE DO SISTEMA"
   );
 
-  updateBrainPanel();
+  setMic(
+    "ANÁLISE DO CÉREBRO"
+  );
+
+  updateBrainUI();
 
 }
 
 
 function closeBrainPanel() {
 
-  brainPanel.classList.remove(
-    "open"
+  brainPanel.classList.remove("open");
+
+  setStatus(
+    "AGUARDANDO",
+    "JARVIS PRONTO"
   );
 
-  main.style.display =
-    "flex";
+  setMic(
+    "MICROFONE: AGUARDANDO"
+  );
+
+  if (shouldListen) {
+
+    scheduleRestart(500);
+
+  }
 
 }
 
 
-/* ============================================================
-   SÍNTESE DE VOZ
-============================================================ */
+closeBrain.addEventListener(
+  "click",
+  closeBrainPanel
+);
 
-function getVoice() {
 
-  if (
-    !("speechSynthesis" in window)
-  ) {
+/* =========================================================
+   VOICE SYNTHESIS
+   ========================================================= */
 
-    return null;
+function getVoices() {
 
+  if (!("speechSynthesis" in window)) {
+    return [];
   }
 
-  const voices =
-    speechSynthesis.getVoices();
+  return speechSynthesis.getVoices();
 
-  const pt =
+}
+
+
+function chooseMaleVoice() {
+
+  const voices =
+    getVoices();
+
+  if (!voices.length) {
+    return null;
+  }
+
+  const ptVoices =
     voices.filter(
       voice =>
         voice.lang &&
@@ -1926,368 +1206,199 @@ function getVoice() {
           .startsWith("pt")
     );
 
-  if (!pt.length) {
+  const candidates =
+    ptVoices.length
+      ? ptVoices
+      : voices;
 
-    return (
-      voices[0] ||
-      null
+  const maleWords = [
+
+    "male",
+    "masculino",
+    "homem",
+    "daniel",
+    "jorge",
+    "ricardo",
+    "felipe",
+    "lucas"
+
+  ];
+
+  const male =
+    candidates.find(
+      voice =>
+        maleWords.some(
+          word =>
+            voice.name
+              .toLowerCase()
+              .includes(word)
+        )
     );
+
+  return male || candidates[0];
+
+}
+
+
+if ("speechSynthesis" in window) {
+
+  speechSynthesis.onvoiceschanged =
+    () => {};
+
+}
+
+
+function stopSpeaking() {
+
+  if (
+    "speechSynthesis" in window
+  ) {
+
+    speechSynthesis.cancel();
 
   }
 
-  const preferred =
-    pt.find(
-      voice =>
-        /daniel|felipe|ricardo|lucas|antonio|male|masculino/i
-          .test(
-            voice.name
-          )
+  speaking = false;
+
+}
+
+
+function speak(text) {
+
+  text =
+    String(text || "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  if (!text) return;
+
+  if (
+    !("speechSynthesis" in window)
+  ) {
+
+    setDiagnostic(
+      "TTS NÃO SUPORTADO"
     );
 
-  return (
-    preferred ||
-    pt[0]
+    return;
+
+  }
+
+  stopSpeaking();
+
+  speaking = true;
+
+  stopRecognition();
+
+  setStatus(
+    "RESPONDENDO",
+    "JARVIS ESTÁ FALANDO"
   );
 
-}
-
-
-function speak(
-  text
-) {
-
-  return new Promise(
-    resolve => {
-
-      if (
-        !("speechSynthesis" in window)
-      ) {
-
-        resolve();
-
-        return;
-
-      }
-
-      speechSynthesis.cancel();
-
-      const utterance =
-        new SpeechSynthesisUtterance(
-          String(text)
-        );
-
-      utterance.lang =
-        "pt-BR";
-
-      utterance.rate =
-        .96;
-
-      utterance.pitch =
-        .78;
-
-      utterance.volume =
-        1;
-
-      const voice =
-        getVoice();
-
-      if (voice) {
-
-        utterance.voice =
-          voice;
-
-      }
-
-      speaking =
-        true;
-
-      setStatus(
-        "RESPONDENDO",
-        "JARVIS está falando..."
-      );
-
-      utterance.onend =
-        () => {
-
-          speaking =
-            false;
-
-          resolve();
-
-          scheduleRestart(
-            300
-          );
-
-        };
-
-      utterance.onerror =
-        () => {
-
-          speaking =
-            false;
-
-          resolve();
-
-          scheduleRestart(
-            500
-          );
-
-        };
-
-      speechSynthesis.speak(
-        utterance
-      );
-
-    }
+  setMic(
+    "SAÍDA DE VOZ ATIVA"
   );
 
-}
+  const utterance =
+    new SpeechSynthesisUtterance(
+      text
+    );
 
+  utterance.lang =
+    "pt-BR";
 
-if (
-  "speechSynthesis" in window
-) {
+  utterance.rate =
+    0.92;
 
-  speechSynthesis.onvoiceschanged =
+  utterance.pitch =
+    0.82;
+
+  utterance.volume =
+    1;
+
+  const voice =
+    chooseMaleVoice();
+
+  if (voice) {
+
+    utterance.voice =
+      voice;
+
+  }
+
+  utterance.onend =
     () => {
 
-      getVoice();
+      speaking = false;
+
+      setStatus(
+        "AGUARDANDO",
+        "JARVIS PRONTO"
+      );
+
+      setMic(
+        "MICROFONE: AGUARDANDO"
+      );
+
+      scheduleRestart(400);
 
     };
 
-}
+  utterance.onerror =
+    () => {
 
+      speaking = false;
 
-/* ============================================================
-   MICROFONE
-============================================================ */
-
-async function requestMicrophone() {
-
-  if (
-    !navigator.mediaDevices ||
-    !navigator.mediaDevices.getUserMedia
-  ) {
-
-    return false;
-
-  }
-
-  try {
-
-    microphoneStream =
-      await navigator.mediaDevices.getUserMedia(
-        {
-          audio: true
-        }
+      setDiagnostic(
+        "ERRO NA SAÍDA DE VOZ"
       );
 
-    startAudioMeter(
-      microphoneStream
-    );
+      scheduleRestart(500);
 
-    return true;
+    };
 
-  } catch (error) {
-
-    console.error(
-      "Microfone:",
-      error
-    );
-
-    return false;
-
-  }
+  speechSynthesis.speak(
+    utterance
+  );
 
 }
 
 
-/* ============================================================
-   MEDIDOR DE ÁUDIO
-============================================================ */
-
-function startAudioMeter(
-  stream
-) {
-
-  try {
-
-    if (!audioContext) {
-
-      audioContext =
-        new (
-          window.AudioContext ||
-          window.webkitAudioContext
-        )();
-
-    }
-
-    if (
-      audioContext.state ===
-      "suspended"
-    ) {
-
-      audioContext.resume();
-
-    }
-
-    const source =
-      audioContext.createMediaStreamSource(
-        stream
-      );
-
-    analyser =
-      audioContext.createAnalyser();
-
-    analyser.fftSize =
-      64;
-
-    source.connect(
-      analyser
-    );
-
-    const data =
-      new Uint8Array(
-        analyser.frequencyBinCount
-      );
-
-    const bars = [];
-
-    audioLevel.innerHTML =
-      "";
-
-    for (
-      let i = 0;
-      i < 12;
-      i++
-    ) {
-
-      const bar =
-        document.createElement(
-          "div"
-        );
-
-      bar.className =
-        "audio-bar";
-
-      audioLevel.appendChild(
-        bar
-      );
-
-      bars.push(
-        bar
-      );
-
-    }
-
-    function animate() {
-
-      if (!analyser) {
-        return;
-      }
-
-      analyser.getByteFrequencyData(
-        data
-      );
-
-      let total = 0;
-
-      for (
-        let i = 0;
-        i < data.length;
-        i++
-      ) {
-
-        total +=
-          data[i];
-
-      }
-
-      const average =
-        total /
-        data.length;
-
-      bars.forEach(
-        (bar,index) => {
-
-          const height =
-            Math.max(
-              5,
-              Math.min(
-                24,
-                average / 7 +
-                Math.sin(
-                  Date.now() / 130 +
-                  index
-                ) * 3
-              )
-            );
-
-          bar.style.height =
-            height + "px";
-
-        }
-      );
-
-      audioAnimation =
-        requestAnimationFrame(
-          animate
-        );
-
-    }
-
-    animate();
-
-  } catch (error) {
-
-    console.log(
-      "Medidor de áudio indisponível."
-    );
-
-  }
-
-}
-
-
-/* ============================================================
+/* =========================================================
    SPEECH RECOGNITION
-============================================================ */
+   ========================================================= */
+
+const SpeechRecognition =
+  window.SpeechRecognition ||
+  window.webkitSpeechRecognition;
+
 
 function createRecognition() {
 
-  const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
-
   if (!SpeechRecognition) {
 
-    recognitionSupported =
-      false;
-
     setStatus(
-      "VOZ INDISPONÍVEL",
-      "Seu navegador não disponibilizou reconhecimento de voz.",
-      "error"
+      "ERRO",
+      "RECONHECIMENTO DE VOZ NÃO SUPORTADO"
+    );
+
+    setMic(
+      "MICROFONE NÃO SUPORTADO"
+    );
+
+    setDiagnostic(
+      "USE GOOGLE CHROME NO ANDROID"
     );
 
     return null;
 
   }
 
-  recognitionSupported =
-    true;
-
   const rec =
     new SpeechRecognition();
 
   rec.lang =
     "pt-BR";
-
-  /*
-    O Chrome Android pode encerrar o
-    reconhecimento mesmo com continuous=true.
-    O onend abaixo reinicia automaticamente.
-  */
 
   rec.continuous =
     true;
@@ -2299,35 +1410,71 @@ function createRecognition() {
     1;
 
 
+  rec.onaudiostart =
+    () => {
+
+      setDiagnostic(
+        "ÁUDIO: OK"
+      );
+
+      setMic(
+        "MICROFONE: CAPTANDO"
+      );
+
+    };
+
+
+  rec.onsoundstart =
+    () => {
+
+      setDiagnostic(
+        "SOM DETECTADO"
+      );
+
+    };
+
+
+  rec.onspeechstart =
+    () => {
+
+      setDiagnostic(
+        "VOZ DETECTADA"
+      );
+
+      setMic(
+        "VOZ DETECTADA"
+      );
+
+    };
+
+
   rec.onstart =
     () => {
 
       recognitionRunning =
         true;
 
-      starting =
+      startingRecognition =
         false;
 
-      connection.classList.remove(
-        "offline"
+      voiceButton.classList.add(
+        "active"
       );
-
-      connectionText.textContent =
-        "ONLINE";
 
       setStatus(
         "ESCUTANDO",
-        "Pode falar normalmente comigo."
+        "PODE FALAR NORMALMENTE COMIGO"
       );
 
-    };
+      setMic(
+        "MICROFONE: ESCUTANDO"
+      );
 
+      setDiagnostic(
+        "RECONHECIMENTO: ATIVO"
+      );
 
-  rec.onaudiostart =
-    () => {
-
-      recognitionRunning =
-        true;
+      startWatchdog();
 
     };
 
@@ -2335,11 +1482,9 @@ function createRecognition() {
   rec.onresult =
     event => {
 
-      let finalText =
-        "";
+      let finalText = "";
 
-      let interimText =
-        "";
+      let interimText = "";
 
       for (
         let i =
@@ -2362,56 +1507,70 @@ function createRecognition() {
         ) {
 
           finalText +=
-            transcript + " ";
+            " " +
+            transcript;
 
         } else {
 
           interimText +=
-            transcript + " ";
+            " " +
+            transcript;
 
         }
 
       }
 
+      interimText =
+        interimText.trim();
 
-      /*
-        Mostra temporariamente o que o
-        navegador está reconhecendo.
-        Isso NÃO é uma resposta do JARVIS.
-      */
+      finalText =
+        finalText.trim();
 
-      if (
-        interimText &&
-        !speaking &&
-        !processing
-      ) {
+      if (interimText) {
 
-        voiceSub.textContent =
-          "Ouvindo: " +
-          interimText.trim();
+        heardText.textContent =
+          "OUVINDO: " +
+          interimText;
 
       }
 
+      if (finalText) {
 
-      if (
-        finalText.trim()
-      ) {
+        clearWatchdog();
 
-        const text =
-          finalText.trim();
+        heardText.textContent =
+          'OUVI: "' +
+          finalText +
+          '"';
 
-        console.log(
-          "VOZ RECONHECIDA:",
-          text
+        setDiagnostic(
+          "RECONHECIMENTO: OK"
         );
 
         processVoiceText(
-          text
+          finalText
         );
 
       }
 
     };
+
+
+  rec.onspeechend =
+    () => {
+
+      setDiagnostic(
+        "FIM DA FALA"
+      );
+
+    };
+
+
+  rec.onsoundend =
+    () => {};
+
+  rec.onaudioend =
+    () => {};
 
 
   rec.onerror =
@@ -2420,37 +1579,47 @@ function createRecognition() {
       recognitionRunning =
         false;
 
-      starting =
+      startingRecognition =
         false;
 
-      console.warn(
-        "SpeechRecognition error:",
+      voiceButton.classList.remove(
+        "active"
+      );
+
+      clearWatchdog();
+
+      const error =
+        event &&
         event.error
+          ? event.error
+          : "unknown";
+
+      console.warn(
+        "JARVIS SpeechRecognition:",
+        error
       );
 
 
       if (
-        event.error ===
-        "not-allowed" ||
-        event.error ===
-        "service-not-allowed"
+        error ===
+        "not-allowed"
       ) {
-
-        setStatus(
-          "MICROFONE BLOQUEADO",
-          "Verifique a permissão do microfone no Chrome.",
-          "error"
-        );
-
-        connection.classList.add(
-          "offline"
-        );
-
-        connectionText.textContent =
-          "OFFLINE";
 
         shouldListen =
           false;
+
+        setStatus(
+          "MICROFONE BLOQUEADO",
+          "PERMISSÃO NECESSÁRIA"
+        );
+
+        setMic(
+          "PERMISSÃO DO MICROFONE"
+        );
+
+        setDiagnostic(
+          "TOQUE NA TELA E PERMITA O MICROFONE"
+        );
 
         return;
 
@@ -2458,14 +1627,47 @@ function createRecognition() {
 
 
       if (
-        event.error ===
+        error ===
+        "service-not-allowed"
+      ) {
+
+        shouldListen =
+          false;
+
+        setStatus(
+          "SERVIÇO BLOQUEADO",
+          "RECONHECIMENTO DE VOZ"
+        );
+
+        setMic(
+          "SERVIÇO INDISPONÍVEL"
+        );
+
+        setDiagnostic(
+          "VERIFIQUE O CHROME E PERMISSÕES"
+        );
+
+        return;
+
+      }
+
+
+      if (
+        error ===
         "audio-capture"
       ) {
 
         setStatus(
           "ERRO DE ÁUDIO",
-          "O navegador não conseguiu capturar o microfone.",
-          "error"
+          "MICROFONE NÃO DISPONÍVEL"
+        );
+
+        setMic(
+          "ERRO NO MICROFONE"
+        );
+
+        setDiagnostic(
+          "OUTRO APLICATIVO PODE ESTAR USANDO O MICROFONE"
         );
 
         scheduleRestart(
@@ -2478,18 +1680,25 @@ function createRecognition() {
 
 
       if (
-        event.error ===
+        error ===
         "network"
       ) {
 
         setStatus(
-          "RECONECTANDO VOZ",
-          "O serviço de reconhecimento será reiniciado.",
-          "waiting"
+          "ERRO DE REDE",
+          "RECONHECIMENTO DE VOZ"
+        );
+
+        setMic(
+          "REDE INDISPONÍVEL"
+        );
+
+        setDiagnostic(
+          "VERIFIQUE A INTERNET"
         );
 
         scheduleRestart(
-          1500
+          2000
         );
 
         return;
@@ -2497,19 +1706,18 @@ function createRecognition() {
       }
 
 
-      if (shouldListen) {
+      setStatus(
+        "RECUPERANDO",
+        "REINICIANDO MICROFONE"
+      );
 
-        setStatus(
-          "RECONECTANDO",
-          "Reiniciando reconhecimento de voz...",
-          "waiting"
-        );
+      setMic(
+        "MICROFONE: RECUPERANDO"
+      );
 
-        scheduleRestart(
-          500
-        );
-
-      }
+      scheduleRestart(
+        1000
+      );
 
     };
 
@@ -2520,101 +1728,60 @@ function createRecognition() {
       recognitionRunning =
         false;
 
-      starting =
+      startingRecognition =
         false;
 
-      console.log(
-        "Reconhecimento encerrado."
+      voiceButton.classList.remove(
+        "active"
       );
 
-
-      /*
-        Esse é um dos pontos principais
-        da correção.
-
-        O Chrome pode encerrar o
-        SpeechRecognition sozinho.
-        O JARVIS inicia novamente.
-      */
+      clearWatchdog();
 
       if (
         shouldListen &&
         !speaking &&
-        !processing
+        !processing &&
+        !brainPanel.classList.contains("open")
       ) {
 
         setStatus(
           "RECONECTANDO",
-          "Restabelecendo escuta...",
-          "waiting"
+          "REINICIANDO RECONHECIMENTO"
+        );
+
+        setMic(
+          "MICROFONE: RECONECTANDO"
         );
 
         scheduleRestart(
-          250
+          350
         );
 
       }
 
     };
 
+
   return rec;
 
 }
 
 
-/* ============================================================
-   REINÍCIO
-============================================================ */
+function initializeRecognition() {
 
-function scheduleRestart(
-  delay = 500
-) {
+  if (!SpeechRecognition) {
 
-  if (!shouldListen) {
-    return;
-  }
-
-  clearTimeout(
-    restartTimer
-  );
-
-  restartTimer =
-    setTimeout(
-      () => {
-
-        startRecognition();
-
-      },
-      delay
+    setStatus(
+      "ERRO",
+      "NAVEGADOR NÃO COMPATÍVEL"
     );
 
-}
+    setMic(
+      "USE CHROME"
+    );
 
+    return false;
 
-/* ============================================================
-   INICIAR RECONHECIMENTO
-============================================================ */
-
-function startRecognition() {
-
-  if (!shouldListen) {
-    return;
-  }
-
-  if (!recognitionSupported) {
-    return;
-  }
-
-  if (recognitionRunning) {
-    return;
-  }
-
-  if (starting) {
-    return;
-  }
-
-  if (speaking || processing) {
-    return;
   }
 
   if (!recognition) {
@@ -2624,32 +1791,125 @@ function startRecognition() {
 
   }
 
-  if (!recognition) {
+  return !!recognition;
+
+}
+
+
+/* =========================================================
+   WATCHDOG
+   ========================================================= */
+
+function startWatchdog() {
+
+  clearWatchdog();
+
+  watchdogTimer =
+    setTimeout(
+      () => {
+
+        if (
+          recognitionRunning &&
+          !processing &&
+          !speaking
+        ) {
+
+          setDiagnostic(
+            "SEM RESULTADO — RECUPERANDO"
+          );
+
+          stopRecognition();
+
+          scheduleRestart(
+            500
+          );
+
+        }
+
+      },
+      12000
+    );
+
+}
+
+
+function clearWatchdog() {
+
+  if (watchdogTimer) {
+
+    clearTimeout(
+      watchdogTimer
+    );
+
+    watchdogTimer =
+      null;
+
+  }
+
+}
+
+
+/* =========================================================
+   START / STOP
+   ========================================================= */
+
+function startRecognition() {
+
+  if (!shouldListen) {
     return;
   }
 
-  starting =
-    true;
+  if (speaking) {
+    return;
+  }
 
-  setStatus(
-    "CONECTANDO",
-    "Ativando reconhecimento de voz...",
-    "waiting"
-  );
+  if (processing) {
+    return;
+  }
+
+  if (
+    brainPanel.classList.contains(
+      "open"
+    )
+  ) {
+
+    return;
+
+  }
+
+  if (
+    recognitionRunning ||
+    startingRecognition
+  ) {
+
+    return;
+
+  }
+
+  if (!initializeRecognition()) {
+    return;
+  }
+
+  startingRecognition =
+    true;
 
   try {
 
     recognition.start();
 
-  } catch (error) {
-
-    console.warn(
-      "start() falhou:",
-      error
+    setDiagnostic(
+      "INICIANDO RECONHECIMENTO"
     );
 
-    starting =
+  } catch (error) {
+
+    startingRecognition =
       false;
+
+    console.warn(
+      "start recognition:",
+      error
+    );
 
     scheduleRestart(
       700
@@ -2660,1000 +1920,195 @@ function startRecognition() {
 }
 
 
-/* ============================================================
-   PROCESSAR FRASE RECONHECIDA
-============================================================ */
+function stopRecognition() {
 
-async function processVoiceText(
-  text
-) {
+  clearWatchdog();
 
-  const clean =
-    text.trim();
+  startingRecognition =
+    false;
 
-  if (!clean) {
+  if (!recognition) {
     return;
   }
-
-
-  /*
-    Evita duplicação do Chrome.
-  */
-
-  const now =
-    Date.now();
-
-  if (
-    clean ===
-    lastTranscript &&
-    now -
-      lastTranscriptTime <
-      2200
-  ) {
-
-    return;
-
-  }
-
-  lastTranscript =
-    clean;
-
-  lastTranscriptTime =
-    now;
-
-
-  console.log(
-    "JARVIS PROCESSANDO:",
-    clean
-  );
-
-
-  /*
-    Agora NÃO existe mais a exigência
-    de falar "JARVIS".
-  */
-
-  updateSession(
-    "question"
-  );
-
-  processing =
-    true;
-
 
   try {
 
-    /*
-      Para o reconhecimento antes
-      de responder.
-    */
+    recognition.stop();
+
+  } catch {}
+
+  recognitionRunning =
+    false;
+
+  voiceButton.classList.remove(
+    "active"
+  );
+
+}
+
+
+function scheduleRestart(delay = 500) {
+
+  if (restartTimer) {
+    return;
+  }
+
+  restartTimer =
+    setTimeout(
+      () => {
+
+        restartTimer =
+          null;
+
+        if (
+          shouldListen &&
+          !speaking &&
+          !processing &&
+          !brainPanel.classList.contains("open")
+        ) {
+
+          startRecognition();
+
+        }
+
+      },
+      delay
+    );
+
+}
+
+
+/* =========================================================
+   DESBLOQUEIO POR TOQUE
+   ========================================================= */
+
+function unlockVoice() {
+
+  if (touchUnlocked) {
+    return;
+  }
+
+  touchUnlocked =
+    true;
+
+  setDiagnostic(
+    "INTERAÇÃO DO USUÁRIO: OK"
+  );
+
+  if (
+    "speechSynthesis" in window
+  ) {
+
+    try {
+
+      speechSynthesis.getVoices();
+
+    } catch {}
+
+  }
+
+  if (
+    !recognitionRunning &&
+    !processing &&
+    !speaking
+  ) {
+
+    startRecognition();
+
+  }
+
+}
+
+
+document.addEventListener(
+  "pointerdown",
+  unlockVoice,
+  {
+    passive: true
+  }
+);
+
+
+/* =========================================================
+   BOTÃO DO MICROFONE
+   ========================================================= */
+
+voiceButton.addEventListener(
+  "click",
+  () => {
+
+    touchUnlocked =
+      true;
 
     if (
-      recognition &&
       recognitionRunning
     ) {
 
-      try {
+      shouldListen =
+        false;
 
-        recognition.stop();
+      stopRecognition();
 
-      } catch {}
-
-    }
-
-
-    const local =
-      await executeLocalCommand(
-        clean
+      setStatus(
+        "PAUSADO",
+        "MICROFONE DESATIVADO"
       );
 
-
-    if (
-      local &&
-      local.handled
-    ) {
-
-      if (local.speak) {
-
-        await speak(
-          local.speak
-        );
-
-      }
-
-      updateSession(
-        "answer"
+      setMic(
+        "MICROFONE: PAUSADO"
       );
 
       return;
 
     }
 
+    shouldListen =
+      true;
 
-    /*
-      Não foi comando local.
-      Vai para a inteligência.
-    */
-
-    await askAI(
-      clean
-    );
-
-
-  } catch (error) {
-
-    console.error(
-      error
-    );
-
-    await speak(
-      "Desculpe. Tive um problema ao processar sua solicitação."
-    );
-
-  } finally {
-
-    processing =
-      false;
-
-    updateBrainPanel();
-
-    if (shouldListen) {
-
-      scheduleRestart(
-        350
-      );
-
-    }
+    startRecognition();
 
   }
+);
 
-}
 
-
-/* ============================================================
+/* =========================================================
    COMANDOS LOCAIS
-============================================================ */
-
-async function executeLocalCommand(
-  text
-) {
-
-  const value =
-    normalize(text);
-
-
-  /* ==========================================================
-     BOA NOITE / BOM DIA / BOA TARDE
-  ========================================================== */
-
-  if (
-    value === "boa noite" ||
-    value.startsWith("boa noite")
-  ) {
-
-    return {
-
-      handled: true,
-
-      speak:
-        "Boa noite, " +
-        OWNER_NAME +
-        ". Como posso ajudá-lo?"
-
-    };
-
-  }
-
-
-  if (
-    value === "bom dia" ||
-    value.startsWith("bom dia")
-  ) {
-
-    return {
-
-      handled: true,
-
-      speak:
-        "Bom dia, " +
-        OWNER_NAME +
-        ". Estou pronto para ajudá-lo."
-
-    };
-
-  }
-
-
-  if (
-    value === "boa tarde" ||
-    value.startsWith("boa tarde")
-  ) {
-
-    return {
-
-      handled: true,
-
-      speak:
-        "Boa tarde, " +
-        OWNER_NAME +
-        ". Como posso ajudá-lo?"
-
-    };
-
-  }
-
-
-  /* ==========================================================
-     CRIADOR
-  ========================================================== */
-
-  if (
-    value.includes(
-      "quem e seu criador"
-    ) ||
-    value.includes(
-      "quem criou voce"
-    ) ||
-    value.includes(
-      "quem te criou"
-    ) ||
-    value.includes(
-      "quem e seu dono"
-    ) ||
-    value.includes(
-      "quem e o dono"
-    ) ||
-    value.includes(
-      "quem e seu proprietario"
-    )
-  ) {
-
-    return {
-
-      handled: true,
-
-      speak:
-        "Meu criador e proprietário é " +
-        OWNER_NAME +
-        "."
-
-    };
-
-  }
-
-
-  /* ==========================================================
-     NOME
-  ========================================================== */
-
-  if (
-    value.includes(
-      "qual e seu nome"
-    ) ||
-    value ===
-      "seu nome"
-  ) {
-
-    return {
-
-      handled: true,
-
-      speak:
-        "Meu nome é JARVIS."
-
-    };
-
-  }
-
-
-  /* ==========================================================
-     HORA
-  ========================================================== */
-
-  if (
-    value.includes(
-      "que horas sao"
-    ) ||
-    value.includes(
-      "qual a hora"
-    ) ||
-    value.includes(
-      "me diga a hora"
-    ) ||
-    value ===
-      "hora"
-  ) {
-
-    const now =
-      new Date();
-
-    const hour =
-      now.getHours()
-        .toString()
-        .padStart(2,"0");
-
-    const minute =
-      now.getMinutes()
-        .toString()
-        .padStart(2,"0");
-
-    return {
-
-      handled: true,
-
-      speak:
-        "Agora são " +
-        hour +
-        " horas e " +
-        minute +
-        " minutos."
-
-    };
-
-  }
-
-
-  /* ==========================================================
-     DATA
-  ========================================================== */
-
-  if (
-    value.includes(
-      "que dia e hoje"
-    ) ||
-    value.includes(
-      "qual a data"
-    ) ||
-    value.includes(
-      "data de hoje"
-    )
-  ) {
-
-    const date =
-      new Date()
-        .toLocaleDateString(
-          "pt-BR",
-          {
-            weekday: "long",
-            day: "2-digit",
-            month: "long",
-            year: "numeric"
-          }
-        );
-
-    return {
-
-      handled: true,
-
-      speak:
-        "Hoje é " +
-        date +
-        "."
-
-    };
-
-  }
-
-
-  /* ==========================================================
-     STATUS
-  ========================================================== */
-
-  if (
-    value === "status" ||
-    value.includes(
-      "status do sistema"
-    ) ||
-    value.includes(
-      "como voce esta"
-    )
-  ) {
-
-    return {
-
-      handled: true,
-
-      speak:
-        "Todos os sistemas principais estão operacionais. Reconhecimento de voz ativo e núcleo de inteligência disponível."
-
-    };
-
-  }
-
-
-  /* ==========================================================
-     CÉREBRO
-  ========================================================== */
-
-  if (
-    value.includes(
-      "mostre seu cerebro"
-    ) ||
-    value.includes(
-      "mostrar seu cerebro"
-    ) ||
-    value.includes(
-      "abra seu cerebro"
-    ) ||
-    value.includes(
-      "analise seu cerebro"
-    ) ||
-    value.includes(
-      "cerebro para analise"
-    ) ||
-    value.includes(
-      "painel do cerebro"
-    )
-  ) {
-
-    openBrain();
-
-    return {
-
-      handled: true,
-
-      speak:
-        "Abrindo meu cérebro para análise."
-
-    };
-
-  }
-
-
-  /* ==========================================================
-     FECHAR CÉREBRO
-  ========================================================== */
-
-  if (
-    value.includes(
-      "feche o cerebro"
-    ) ||
-    value.includes(
-      "fechar cerebro"
-    ) ||
-    value.includes(
-      "volte ao sistema"
-    )
-  ) {
-
-    closeBrainPanel();
-
-    return {
-
-      handled: true,
-
-      speak:
-        "Retornando ao sistema principal."
-
-    };
-
-  }
-
-
-  /* ==========================================================
-     YOUTUBE
-  ========================================================== */
-
-  if (
-    value ===
-      "abra o youtube" ||
-    value ===
-      "abrir youtube" ||
-    value.includes(
-      "abra youtube"
-    )
-  ) {
-
-    openWebsite(
-      "https://www.youtube.com/"
-    );
-
-    return {
-
-      handled: true,
-
-      speak:
-        "Abrindo o YouTube."
-
-    };
-
-  }
-
-
-  /* ==========================================================
-     GOOGLE
-  ========================================================== */
-
-  if (
-    value ===
-      "abra o google" ||
-    value ===
-      "abrir google"
-  ) {
-
-    openWebsite(
-      "https://www.google.com/"
-    );
-
-    return {
-
-      handled: true,
-
-      speak:
-        "Abrindo o Google."
-
-    };
-
-  }
-
-
-  /* ==========================================================
-     WHATSAPP
-  ========================================================== */
-
-  if (
-    value ===
-      "abra o whatsapp" ||
-    value ===
-      "abrir whatsapp" ||
-    value.includes(
-      "abra whatsapp"
-    )
-  ) {
-
-    openWebsite(
-      "https://web.whatsapp.com/"
-    );
-
-    return {
-
-      handled: true,
-
-      speak:
-        "Abrindo o WhatsApp Web."
-
-    };
-
-  }
-
-
-  /* ==========================================================
-     INSTAGRAM
-  ========================================================== */
-
-  if (
-    value ===
-      "abra o instagram" ||
-    value ===
-      "abrir instagram"
-  ) {
-
-    openWebsite(
-      "https://www.instagram.com/"
-    );
-
-    return {
-
-      handled: true,
-
-      speak:
-        "Abrindo o Instagram."
-
-    };
-
-  }
-
-
-  /* ==========================================================
-     DISCORD
-  ========================================================== */
-
-  if (
-    value ===
-      "abra o discord" ||
-    value ===
-      "abrir discord"
-  ) {
-
-    openWebsite(
-      "https://discord.com/app"
-    );
-
-    return {
-
-      handled: true,
-
-      speak:
-        "Abrindo o Discord."
-
-    };
-
-  }
-
-
-  /* ==========================================================
-     FACEBOOK
-  ========================================================== */
-
-  if (
-    value ===
-      "abra o facebook" ||
-    value ===
-      "abrir facebook"
-  ) {
-
-    openWebsite(
-      "https://www.facebook.com/"
-    );
-
-    return {
-
-      handled: true,
-
-      speak:
-        "Abrindo o Facebook."
-
-    };
-
-  }
-
-
-  /* ==========================================================
-     GMAIL
-  ========================================================== */
-
-  if (
-    value ===
-      "abra o gmail" ||
-    value ===
-      "abrir gmail"
-  ) {
-
-    openWebsite(
-      "https://mail.google.com/"
-    );
-
-    return {
-
-      handled: true,
-
-      speak:
-        "Abrindo o Gmail."
-
-    };
-
-  }
-
-
-  /* ==========================================================
-     MAPS
-  ========================================================== */
-
-  if (
-    value ===
-      "abra o maps" ||
-    value ===
-      "abrir mapas" ||
-    value.includes(
-      "abra o google maps"
-    )
-  ) {
-
-    openWebsite(
-      "https://maps.google.com/"
-    );
-
-    return {
-
-      handled: true,
-
-      speak:
-        "Abrindo o Google Maps."
-
-    };
-
-  }
-
-
-  /* ==========================================================
-     SPOTIFY
-  ========================================================== */
-
-  if (
-    value ===
-      "abra o spotify" ||
-    value ===
-      "abrir spotify"
-  ) {
-
-    openWebsite(
-      "https://open.spotify.com/"
-    );
-
-    return {
-
-      handled: true,
-
-      speak:
-        "Abrindo o Spotify."
-
-    };
-
-  }
-
-
-  /* ==========================================================
-     PESQUISA GOOGLE
-  ========================================================== */
-
-  if (
-    value.startsWith(
-      "pesquise no google"
-    ) ||
-    value.startsWith(
-      "procure no google"
-    )
-  ) {
-
-    let query =
-      text
-        .replace(
-          /pesquise no google/gi,
-          ""
-        )
-        .replace(
-          /procure no google/gi,
-          ""
-        )
-        .trim();
-
-    if (!query) {
-
-      return {
-
-        handled: true,
-
-        speak:
-          "O que você quer que eu pesquise?"
-
-      };
-
-    }
-
-    openWebsite(
-      "https://www.google.com/search?q=" +
-      encodeURIComponent(
-        query
-      )
-    );
-
-    return {
-
-      handled: true,
-
-      speak:
-        "Pesquisando no Google por " +
-        query +
-        "."
-
-    };
-
-  }
-
-
-  /* ==========================================================
-     PESQUISA YOUTUBE
-  ========================================================== */
-
-  if (
-    value.startsWith(
-      "pesquise no youtube"
-    ) ||
-    value.startsWith(
-      "procure no youtube"
-    )
-  ) {
-
-    let query =
-      text
-        .replace(
-          /pesquise no youtube/gi,
-          ""
-        )
-        .replace(
-          /procure no youtube/gi,
-          ""
-        )
-        .trim();
-
-    if (!query) {
-
-      return {
-
-        handled: true,
-
-        speak:
-          "O que você quer procurar no YouTube?"
-
-      };
-
-    }
-
-    openWebsite(
-      "https://www.youtube.com/results?search_query=" +
-      encodeURIComponent(
-        query
-      )
-    );
-
-    return {
-
-      handled: true,
-
-      speak:
-        "Pesquisando no YouTube por " +
-        query +
-        "."
-
-    };
-
-  }
-
-
-  /* ==========================================================
-     MEMÓRIA
-  ========================================================== */
-
-  if (
-    value.startsWith(
-      "memorize"
-    ) ||
-    value.startsWith(
-      "lembre"
-    ) ||
-    value.startsWith(
-      "guarde"
-    )
-  ) {
-
-    const memoryText =
-      text
-        .replace(
-          /memorize/gi,
-          ""
-        )
-        .replace(
-          /lembre/gi,
-          ""
-        )
-        .replace(
-          /guarde/gi,
-          ""
-        )
-        .trim();
-
-    if (memoryText) {
-
-      remember(
-        memoryText
-      );
-
-      const knowledge =
-        loadKnowledge();
-
-      knowledge.personal.push({
-
-        topic:
-          memoryText,
-
-        value:
-          memoryText,
-
-        createdAt:
-          new Date().toISOString()
-
-      });
-
-      saveKnowledge(
-        knowledge
-      );
-
-      updateBrainPanel();
-
-      return {
-
-        handled: true,
-
-        speak:
-          "Entendido. Guardei essa informação na minha memória."
-
-      };
-
-    }
-
-  }
-
-
-  /* ==========================================================
-     APRENDER
-  ========================================================== */
-
-  if (
-    value.startsWith(
-      "aprenda"
-    ) ||
-    value.startsWith(
-      "aprende"
-    )
-  ) {
-
-    const topic =
-      text
-        .replace(
-          /aprenda/gi,
-          ""
-        )
-        .replace(
-          /aprende/gi,
-          ""
-        )
-        .trim();
-
-    if (topic) {
-
-      learnTopic(
-        topic
-      );
-
-      return {
-
-        handled: true,
-
-        speak:
-          "Entendido. Registrei essa informação como conhecimento aprendido."
-
-      };
-
-    }
-
-  }
-
-
-  /*
-    Não é comando local.
-    A pergunta será enviada para a IA.
-  */
-
-  return {
-
-    handled: false
-
-  };
-
-}
-
-
-/* ============================================================
-   ABRIR SITE
-============================================================ */
+   ========================================================= */
 
 function openWebsite(
-  url
+  url,
+  label
 ) {
 
-  /*
-    Tentamos abrir uma nova aba.
-    Se o navegador bloquear, usamos a
-    navegação da própria página.
-  */
+  setStatus(
+    "ABRINDO",
+    label
+  );
 
-  const opened =
-    window.open(
-      url,
-      "_blank"
-    );
+  setMic(
+    "COMANDO EXECUTADO"
+  );
 
-  if (!opened) {
+  setDiagnostic(
+    "ABRINDO " + label
+  );
+
+  try {
+
+    const newWindow =
+      window.open(
+        url,
+        "_blank"
+      );
+
+    if (!newWindow) {
+
+      window.location.href =
+        url;
+
+    }
+
+  } catch {
 
     window.location.href =
       url;
@@ -3663,25 +2118,774 @@ function openWebsite(
 }
 
 
-/* ============================================================
+function executeLocalCommand(
+  originalText
+) {
+
+  const text =
+    normalize(originalText);
+
+
+  /* ---------------------------------
+     SAUDAÇÕES
+     --------------------------------- */
+
+  if (
+    text === "boa noite" ||
+    text.includes("boa noite")
+  ) {
+
+    speak(
+      "Boa noite, Fernando. Estou funcionando e pronto para ajudar."
+    );
+
+    return true;
+
+  }
+
+
+  if (
+    text === "bom dia" ||
+    text.includes("bom dia")
+  ) {
+
+    speak(
+      "Bom dia, Fernando. JARVIS está online e pronto."
+    );
+
+    return true;
+
+  }
+
+
+  if (
+    text === "boa tarde" ||
+    text.includes("boa tarde")
+  ) {
+
+    speak(
+      "Boa tarde, Fernando. JARVIS está pronto."
+    );
+
+    return true;
+
+  }
+
+
+  /* ---------------------------------
+     CRIADOR
+     --------------------------------- */
+
+  if (
+    text.includes("quem te criou") ||
+    text.includes("quem criou você") ||
+    text.includes("quem é seu criador") ||
+    text.includes("quem e seu criador") ||
+    text.includes("quem é seu dono") ||
+    text.includes("quem e seu dono") ||
+    text.includes("qual é o meu nome") ||
+    text.includes("qual e o meu nome")
+  ) {
+
+    speak(
+      "Meu criador e proprietário é Fernando."
+    );
+
+    return true;
+
+  }
+
+
+  /* ---------------------------------
+     NOME
+     --------------------------------- */
+
+  if (
+    text === "qual é o seu nome" ||
+    text === "qual e o seu nome" ||
+    text.includes("seu nome é") ||
+    text.includes("seu nome e")
+  ) {
+
+    speak(
+      "Meu nome é JARVIS."
+    );
+
+    return true;
+
+  }
+
+
+  /* ---------------------------------
+     HORA
+     --------------------------------- */
+
+  if (
+    text.includes("que horas são") ||
+    text.includes("que horas sao") ||
+    text.includes("qual é a hora") ||
+    text.includes("qual e a hora") ||
+    text.includes("horas agora") ||
+    text === "hora"
+  ) {
+
+    const now =
+      new Date();
+
+    const hour =
+      String(
+        now.getHours()
+      ).padStart(2, "0");
+
+    const minute =
+      String(
+        now.getMinutes()
+      ).padStart(2, "0");
+
+    speak(
+      `Agora são ${hour} horas e ${minute} minutos.`
+    );
+
+    return true;
+
+  }
+
+
+  /* ---------------------------------
+     DATA
+     --------------------------------- */
+
+  if (
+    text.includes("qual é a data") ||
+    text.includes("qual e a data") ||
+    text.includes("que dia é hoje") ||
+    text.includes("que dia e hoje") ||
+    text === "data"
+  ) {
+
+    const now =
+      new Date();
+
+    const date =
+      now.toLocaleDateString(
+        "pt-BR",
+        {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric"
+        }
+      );
+
+    speak(
+      `Hoje é ${date}.`
+    );
+
+    return true;
+
+  }
+
+
+  /* ---------------------------------
+     STATUS
+     --------------------------------- */
+
+  if (
+    text.includes("status do sistema") ||
+    text.includes("como você está") ||
+    text.includes("como voce esta") ||
+    text === "status"
+  ) {
+
+    speak(
+      "Todos os sistemas principais estão ativos. O reconhecimento de voz está disponível e o cérebro remoto pode ser acessado pela API."
+    );
+
+    return true;
+
+  }
+
+
+  /* ---------------------------------
+     CÉREBRO
+     --------------------------------- */
+
+  if (
+    text.includes("mostre seu cérebro") ||
+    text.includes("mostre seu cerebro") ||
+    text.includes("abrir cérebro") ||
+    text.includes("abrir cerebro") ||
+    text.includes("analisar seu cérebro") ||
+    text.includes("analisar seu cerebro") ||
+    text.includes("análise do cérebro") ||
+    text.includes("analise do cerebro")
+  ) {
+
+    openBrainPanel();
+
+    speak(
+      "Abrindo meu cérebro para análise."
+    );
+
+    return true;
+
+  }
+
+
+  if (
+    text.includes("fechar cérebro") ||
+    text.includes("fechar cerebro") ||
+    text.includes("fechar análise") ||
+    text.includes("fechar analise")
+  ) {
+
+    closeBrainPanel();
+
+    speak(
+      "Análise encerrada. Voltando ao modo de escuta."
+    );
+
+    return true;
+
+  }
+
+
+  /* ---------------------------------
+     YOUTUBE
+     --------------------------------- */
+
+  if (
+    text === "youtube" ||
+    text.includes("abrir youtube")
+  ) {
+
+    openWebsite(
+      "https://www.youtube.com/",
+      "YOUTUBE"
+    );
+
+    return true;
+
+  }
+
+
+  if (
+    text.startsWith(
+      "pesquisar no youtube"
+    ) ||
+    text.startsWith(
+      "pesquise no youtube"
+    )
+  ) {
+
+    let query =
+      text
+        .replace(
+          "pesquisar no youtube",
+          ""
+        )
+        .replace(
+          "pesquise no youtube",
+          ""
+        )
+        .trim();
+
+    if (!query) {
+
+      speak(
+        "O que você quer pesquisar no YouTube?"
+      );
+
+      return true;
+
+    }
+
+    openWebsite(
+      "https://www.youtube.com/results?search_query=" +
+        encodeURIComponent(query),
+      "PESQUISA NO YOUTUBE"
+    );
+
+    return true;
+
+  }
+
+
+  /* ---------------------------------
+     GOOGLE
+     --------------------------------- */
+
+  if (
+    text === "google" ||
+    text.includes("abrir google")
+  ) {
+
+    openWebsite(
+      "https://www.google.com/",
+      "GOOGLE"
+    );
+
+    return true;
+
+  }
+
+
+  if (
+    text.startsWith(
+      "pesquisar no google"
+    ) ||
+    text.startsWith(
+      "pesquise no google"
+    ) ||
+    text.startsWith(
+      "pesquisar "
+    ) ||
+    text.startsWith(
+      "pesquise "
+    )
+  ) {
+
+    let query =
+      text
+        .replace(
+          "pesquisar no google",
+          ""
+        )
+        .replace(
+          "pesquise no google",
+          ""
+        )
+        .replace(
+          "pesquisar ",
+          ""
+        )
+        .replace(
+          "pesquise ",
+          ""
+        )
+        .trim();
+
+    if (!query) {
+
+      speak(
+        "O que você quer pesquisar?"
+      );
+
+      return true;
+
+    }
+
+    openWebsite(
+      "https://www.google.com/search?q=" +
+        encodeURIComponent(query),
+      "PESQUISA NO GOOGLE"
+    );
+
+    return true;
+
+  }
+
+
+  /* ---------------------------------
+     WHATSAPP
+     --------------------------------- */
+
+  if (
+    text.includes("abrir whatsapp") ||
+    text === "whatsapp"
+  ) {
+
+    openWebsite(
+      "https://web.whatsapp.com/",
+      "WHATSAPP WEB"
+    );
+
+    return true;
+
+  }
+
+
+  /* ---------------------------------
+     INSTAGRAM
+     --------------------------------- */
+
+  if (
+    text.includes("abrir instagram") ||
+    text === "instagram"
+  ) {
+
+    openWebsite(
+      "https://www.instagram.com/",
+      "INSTAGRAM"
+    );
+
+    return true;
+
+  }
+
+
+  /* ---------------------------------
+     DISCORD
+     --------------------------------- */
+
+  if (
+    text.includes("abrir discord") ||
+    text === "discord"
+  ) {
+
+    openWebsite(
+      "https://discord.com/app",
+      "DISCORD"
+    );
+
+    return true;
+
+  }
+
+
+  /* ---------------------------------
+     FACEBOOK
+     --------------------------------- */
+
+  if (
+    text.includes("abrir facebook") ||
+    text === "facebook"
+  ) {
+
+    openWebsite(
+      "https://www.facebook.com/",
+      "FACEBOOK"
+    );
+
+    return true;
+
+  }
+
+
+  /* ---------------------------------
+     GMAIL
+     --------------------------------- */
+
+  if (
+    text.includes("abrir gmail") ||
+    text === "gmail"
+  ) {
+
+    openWebsite(
+      "https://mail.google.com/",
+      "GMAIL"
+    );
+
+    return true;
+
+  }
+
+
+  /* ---------------------------------
+     MAPS
+     --------------------------------- */
+
+  if (
+    text.includes("abrir mapas") ||
+    text.includes("abrir google maps") ||
+    text === "mapas"
+  ) {
+
+    openWebsite(
+      "https://maps.google.com/",
+      "GOOGLE MAPS"
+    );
+
+    return true;
+
+  }
+
+
+  /* ---------------------------------
+     SPOTIFY
+     --------------------------------- */
+
+  if (
+    text.includes("abrir spotify") ||
+    text === "spotify"
+  ) {
+
+    openWebsite(
+      "https://open.spotify.com/",
+      "SPOTIFY"
+    );
+
+    return true;
+
+  }
+
+
+  /* ---------------------------------
+     MEMÓRIA
+     --------------------------------- */
+
+  if (
+    text.startsWith(
+      "lembre que "
+    )
+  ) {
+
+    const value =
+      originalText
+        .slice(
+          originalText
+            .toLowerCase()
+            .indexOf("lembre que ") +
+          11
+        )
+        .trim();
+
+    if (value) {
+
+      memory.push({
+
+        text: value,
+
+        at:
+          new Date().toISOString(),
+
+        source:
+          "usuario"
+
+      });
+
+      saveMemory();
+
+      addLearned(
+        value,
+        "memoria do usuário"
+      );
+
+      addSessionEvent(
+        "memory_saved",
+        {
+          text: value
+        }
+      );
+
+      updateBrainUI();
+
+      speak(
+        "Entendido. Registrei essa informação na minha memória."
+      );
+
+    }
+
+    return true;
+
+  }
+
+
+  if (
+    text.startsWith(
+      "aprenda que "
+    )
+  ) {
+
+    const value =
+      originalText
+        .slice(
+          originalText
+            .toLowerCase()
+            .indexOf("aprenda que ") +
+          12
+        )
+        .trim();
+
+    if (value) {
+
+      addLearned(
+        value,
+        "usuario"
+      );
+
+      addKnown(
+        value
+      );
+
+      addSessionEvent(
+        "learning",
+        {
+          text: value
+        }
+      );
+
+      updateBrainUI();
+
+      speak(
+        "Informação aprendida e registrada no meu núcleo de conhecimento."
+      );
+
+    }
+
+    return true;
+
+  }
+
+
+  return false;
+
+}
+
+
+/* =========================================================
+   PROCESSAR VOZ
+   ========================================================= */
+
+async function processVoiceText(
+  text
+) {
+
+  text =
+    String(text || "")
+      .trim();
+
+  if (!text) {
+    return;
+  }
+
+  if (processing) {
+    return;
+  }
+
+  if (speaking) {
+    return;
+  }
+
+  lastTranscript =
+    text;
+
+  session.questions++;
+
+  addSessionEvent(
+    "question",
+    {
+      text
+    }
+  );
+
+  saveSession();
+
+  updateBrainUI();
+
+  processing =
+    true;
+
+  stopRecognition();
+
+  setStatus(
+    "ANALISANDO",
+    "PROCESSANDO SUA SOLICITAÇÃO"
+  );
+
+  setMic(
+    "PROCESSANDO"
+  );
+
+  setDiagnostic(
+    "OUVI: " + text
+  );
+
+
+  try {
+
+    const handled =
+      executeLocalCommand(
+        text
+      );
+
+    if (handled) {
+
+      session.answers++;
+
+      saveSession();
+
+      updateBrainUI();
+
+      processing =
+        false;
+
+      return;
+
+    }
+
+
+    await askAI(
+      text
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Processamento:",
+      error
+    );
+
+    speak(
+      "Tive um problema ao processar essa solicitação."
+    );
+
+  } finally {
+
+    processing =
+      false;
+
+    updateBrainUI();
+
+    if (
+      !speaking &&
+      shouldListen &&
+      !brainPanel.classList.contains("open")
+    ) {
+
+      scheduleRestart(
+        500
+      );
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
    API JARVIS
-============================================================ */
+   ========================================================= */
 
 async function askAI(
-  message
+  text
 ) {
 
   setStatus(
-    "PROCESSANDO",
-    "Consultando meu núcleo de inteligência..."
+    "CÉREBRO",
+    "ACESSANDO INTELIGÊNCIA ARTIFICIAL"
   );
 
-  connectionText.textContent =
-    "ONLINE";
+  setMic(
+    "PROCESSANDO SOLICITAÇÃO"
+  );
+
+  setDiagnostic(
+    "API: CONECTANDO"
+  );
 
 
-  const knowledge =
-    loadKnowledge();
+  const controller =
+    new AbortController();
+
+  const timeout =
+    setTimeout(
+      () => {
+        controller.abort();
+      },
+      30000
+    );
 
 
   try {
@@ -3690,498 +2894,308 @@ async function askAI(
       await fetch(
         "/api/chat",
         {
-
-          method:
-            "POST",
+          method: "POST",
 
           headers: {
-
             "Content-Type":
               "application/json"
-
           },
 
           body:
             JSON.stringify({
 
               message:
-                message,
+                text,
 
               memory:
-                memoryForAPI(),
+                memory,
 
-              brain: {
+              brain:
+                knowledge
 
-                known:
-                  knowledge.known,
+            }),
 
-                learned:
-                  knowledge.learned,
-
-                learning:
-                  knowledge.learning,
-
-                unknown:
-                  knowledge.unknown,
-
-                personal:
-                  knowledge.personal
-
-              }
-
-            })
+          signal:
+            controller.signal
 
         }
       );
 
 
-    let data;
+    const raw =
+      await response.text();
+
+
+    let data = null;
 
     try {
 
       data =
-        await response.json();
+        raw
+          ? JSON.parse(raw)
+          : null;
 
     } catch {
 
-      throw new Error(
-        "Resposta inválida do servidor."
-      );
+      data = null;
 
     }
 
 
     if (!response.ok) {
 
+      const message =
+        data &&
+        data.error
+          ? data.error
+          : `HTTP ${response.status}`;
+
       throw new Error(
-        data?.error ||
-        "Erro no servidor."
+        message
       );
 
     }
 
 
-    let answer =
-      data?.answer ||
-      data?.output ||
-      data?.message ||
+    if (!data) {
+
+      throw new Error(
+        "Resposta vazia da API"
+      );
+
+    }
+
+
+    const answer =
+      data.answer ||
+      data.output ||
+      data.response ||
+      data.text ||
       "";
 
 
     if (!answer) {
 
       throw new Error(
-        "O JARVIS não recebeu resposta da IA."
+        "A API não retornou uma resposta"
       );
 
     }
 
 
-    /*
-      MEMÓRIA_TO_SAVE
-    */
+    setDiagnostic(
+      "API: RESPOSTA RECEBIDA"
+    );
 
-    const marker =
+
+    let cleanAnswer =
+      String(answer)
+        .trim();
+
+
+    /* ---------------------------------
+       MEMÓRIA RETORNADA PELO BACKEND
+       --------------------------------- */
+
+    const memoryMarker =
       "MEMORY_TO_SAVE:";
 
     const markerIndex =
-      answer.lastIndexOf(
-        marker
+      cleanAnswer.indexOf(
+        memoryMarker
       );
 
 
     if (
-      markerIndex >= 0
+      markerIndex !== -1
     ) {
 
-      const memoryToSave =
-        answer
+      const memoryPart =
+        cleanAnswer
           .slice(
             markerIndex +
-            marker.length
+            memoryMarker.length
           )
-          .trim()
-          .split("\n")[0]
           .trim();
 
-      if (memoryToSave) {
-
-        remember(
-          memoryToSave
-        );
-
-      }
-
-      answer =
-        answer
+      cleanAnswer =
+        cleanAnswer
           .slice(
             0,
             markerIndex
           )
           .trim();
 
+
+      if (memoryPart) {
+
+        memory.push({
+
+          text:
+            memoryPart,
+
+          at:
+            new Date().toISOString(),
+
+          source:
+            "jarvis"
+
+        });
+
+        saveMemory();
+
+        addLearned(
+          memoryPart,
+          "JARVIS"
+        );
+
+      }
+
     }
 
 
-    /*
-      Resposta da IA é falada.
-    */
+    session.answers++;
 
-    updateSession(
-      "answer"
+    addSessionEvent(
+      "answer",
+      {
+        text:
+          cleanAnswer
+      }
     );
 
-    updateBrainPanel();
+    saveSession();
 
-    await speak(
-      answer
+    updateBrainUI();
+
+
+    speak(
+      cleanAnswer
     );
 
 
   } catch (error) {
 
     console.error(
-      "API JARVIS:",
+      "JARVIS API:",
       error
     );
 
-    connection.classList.add(
-      "offline"
-    );
 
-    connectionText.textContent =
-      "API OFFLINE";
+    if (
+      error &&
+      error.name ===
+      "AbortError"
+    ) {
 
+      setDiagnostic(
+        "API: TIMEOUT"
+      );
 
-    await speak(
-      "Não consegui acessar meu núcleo de inteligência agora. Verifique a conexão com o servidor."
-    );
-
-  }
-
-}
-
-
-/* ============================================================
-   BOTÕES
-============================================================ */
-
-brainButton.onclick =
-  () => {
-
-    openBrain();
-
-  };
-
-
-closeBrain.onclick =
-  () => {
-
-    closeBrainPanel();
-
-  };
-
-
-voiceButton.onclick =
-  async () => {
-
-    shouldListen =
-      !shouldListen;
-
-    if (shouldListen) {
-
-      if (audioContext) {
-
-        try {
-
-          await audioContext.resume();
-
-        } catch {}
-
-      }
-
-      await requestMicrophone();
-
-      startRecognition();
-
-      showToast(
-        "Sistema de voz ativado."
+      speak(
+        "A conexão com meu cérebro remoto demorou demais para responder."
       );
 
     } else {
 
-      clearTimeout(
-        restartTimer
+      setDiagnostic(
+        "API: ERRO"
       );
 
-      if (recognition) {
-
-        try {
-
-          recognition.stop();
-
-        } catch {}
-
-      }
-
-      recognitionRunning =
-        false;
-
-      setStatus(
-        "PAUSADO",
-        "Toque em VOZ para voltar a escutar.",
-        "waiting"
+      console.error(
+        "Detalhes da API:",
+        error.message
       );
 
-      showToast(
-        "Sistema de voz pausado."
+      speak(
+        "Não consegui acessar meu cérebro remoto neste momento."
       );
 
     }
 
-  };
+  } finally {
 
-
-clearButton.onclick =
-  () => {
-
-    localStorage.removeItem(
-      MEMORY_KEY
+    clearTimeout(
+      timeout
     );
 
-    localStorage.removeItem(
-      SESSION_KEY
-    );
-
-    localStorage.removeItem(
-      KNOWLEDGE_KEY
-    );
-
-    updateBrainPanel();
-
-    showToast(
-      "Memória local limpa."
-    );
-
-  };
-
-
-/* ============================================================
-   TOQUE NA TELA
-============================================================ */
-
-document.addEventListener(
-  "pointerdown",
-  () => {
-
-    if (audioContext) {
-
-      try {
-
-        audioContext.resume();
-
-      } catch {}
-
-    }
-
-
-    if (
-      shouldListen &&
-      recognitionSupported &&
-      !recognitionRunning &&
-      !starting &&
-      !speaking &&
-      !processing
-    ) {
-
-      startRecognition();
-
-    }
-
-  },
-  {
-    passive: true
   }
-);
+
+}
 
 
-/* ============================================================
-   ESTRELAS
-============================================================ */
+/* =========================================================
+   CANVAS — CÉREBRO DE PARTÍCULAS
+   ========================================================= */
 
-const starsCanvas =
+const canvas =
   document.getElementById(
-    "stars"
+    "brainCanvas"
   );
 
 const ctx =
-  starsCanvas.getContext(
+  canvas.getContext(
     "2d"
   );
 
-let stars = [];
+let particles = [];
 
 
-function resizeStars() {
+function resizeCanvas() {
 
-  starsCanvas.width =
-    window.innerWidth;
+  const rect =
+    canvas.getBoundingClientRect();
 
-  starsCanvas.height =
-    window.innerHeight;
+  const dpr =
+    Math.min(
+      window.devicePixelRatio || 1,
+      2
+    );
+
+  canvas.width =
+    rect.width * dpr;
+
+  canvas.height =
+    rect.height * dpr;
+
+  ctx.setTransform(
+    dpr,
+    0,
+    0,
+    dpr,
+    0,
+    0
+  );
+
+  createParticles();
 
 }
 
 
-function createStars() {
+function createParticles() {
 
-  stars = [];
+  particles = [];
 
-  const amount =
+  const rect =
+    canvas.getBoundingClientRect();
+
+  const count =
     Math.min(
-      150,
-      Math.floor(
-        window.innerWidth *
-        window.innerHeight /
-        7000
+      230,
+      Math.max(
+        100,
+        Math.floor(
+          rect.width / 2
+        )
       )
     );
 
-  for (
-    let i = 0;
-    i < amount;
-    i++
-  ) {
-
-    stars.push({
-
-      x:
-        Math.random() *
-        window.innerWidth,
-
-      y:
-        Math.random() *
-        window.innerHeight,
-
-      r:
-        Math.random() *
-        1.5,
-
-      speed:
-        .05 +
-        Math.random() *
-        .25,
-
-      opacity:
-        .15 +
-        Math.random() *
-        .6
-
-    });
-
-  }
-
-}
-
-
-function animateStars() {
-
-  ctx.clearRect(
-    0,
-    0,
-    starsCanvas.width,
-    starsCanvas.height
-  );
-
-  stars.forEach(
-    star => {
-
-      star.y +=
-        star.speed;
-
-      if (
-        star.y >
-        window.innerHeight
-      ) {
-
-        star.y = 0;
-
-      }
-
-      ctx.globalAlpha =
-        star.opacity;
-
-      ctx.beginPath();
-
-      ctx.arc(
-        star.x,
-        star.y,
-        star.r,
-        0,
-        Math.PI * 2
-      );
-
-      ctx.fillStyle =
-        "#48dff5";
-
-      ctx.fill();
-
-    }
-  );
-
-  requestAnimationFrame(
-    animateStars
-  );
-
-}
-
-
-resizeStars();
-
-createStars();
-
-animateStars();
-
-
-window.addEventListener(
-  "resize",
-  () => {
-
-    resizeStars();
-
-    createStars();
-
-  }
-);
-
-
-/* ============================================================
-   PARTÍCULAS
-============================================================ */
-
-function createBrainParticles() {
-
-  particles.innerHTML =
-    "";
-
-  const amount =
-    window.innerWidth < 500
-      ? 130
-      : 190;
 
   for (
     let i = 0;
-    i < amount;
+    i < count;
     i++
   ) {
-
-    const particle =
-      document.createElement(
-        "span"
-      );
-
-    particle.className =
-      "particle";
 
     const angle =
       Math.random() *
@@ -4191,234 +3205,314 @@ function createBrainParticles() {
     const radius =
       Math.sqrt(
         Math.random()
-      ) * 39;
+      );
 
-    const x =
-      50 +
-      Math.cos(angle) *
-      radius;
+    particles.push({
 
-    const y =
-      50 +
-      Math.sin(angle) *
-      radius *
-      .7;
+      angle,
 
-    particle.style.left =
-      x + "%";
+      radius,
 
-    particle.style.top =
-      y + "%";
+      speed:
+        (Math.random() -
+          .5) *
+        .003,
 
-    const size =
-      1 +
-      Math.random() * 3;
+      size:
+        Math.random() *
+        1.8 +
+        .4,
 
-    particle.style.width =
-      size + "px";
+      depth:
+        Math.random(),
 
-    particle.style.height =
-      size + "px";
+      offset:
+        Math.random() *
+        Math.PI *
+        2
 
-    particle.dataset.x =
-      x;
-
-    particle.dataset.y =
-      y;
-
-    particle.dataset.phase =
-      Math.random() *
-      Math.PI *
-      2;
-
-    particle.dataset.speed =
-      .5 +
-      Math.random() *
-      1.5;
-
-    particles.appendChild(
-      particle
-    );
+    });
 
   }
 
 }
 
 
-function animateBrain() {
+function drawBrain() {
 
-  const now =
-    Date.now() /
-    1000;
+  const rect =
+    canvas.getBoundingClientRect();
 
-  document
-    .querySelectorAll(
-      ".particle"
-    )
-    .forEach(
-      particle => {
+  const width =
+    rect.width;
 
-        const x =
-          Number(
-            particle.dataset.x
-          );
+  const height =
+    rect.height;
 
-        const y =
-          Number(
-            particle.dataset.y
-          );
+  ctx.clearRect(
+    0,
+    0,
+    width,
+    height
+  );
 
-        const phase =
-          Number(
-            particle.dataset.phase
-          );
 
-        const speed =
-          Number(
-            particle.dataset.speed
-          );
+  const cx =
+    width / 2;
 
-        particle.style.left =
-          (
-            x +
-            Math.sin(
-              now * speed +
-              phase
-            ) * 2.5
-          ) + "%";
+  const cy =
+    height / 2;
 
-        particle.style.top =
-          (
-            y +
-            Math.cos(
-              now * speed * .8 +
-              phase
-            ) * 2.5
-          ) + "%";
+  const base =
+    Math.min(
+      width,
+      height
+    ) *
+    .38;
 
-      }
+
+  for (
+    const p of particles
+  ) {
+
+    p.angle +=
+      p.speed;
+
+
+    const wave =
+      Math.sin(
+        Date.now() *
+          0.001 +
+          p.offset
+      ) *
+      .035;
+
+
+    const r =
+      base *
+      (p.radius +
+        wave);
+
+
+    const x =
+      cx +
+      Math.cos(
+        p.angle
+      ) *
+      r;
+
+
+    const y =
+      cy +
+      Math.sin(
+        p.angle
+      ) *
+      r *
+      .72;
+
+
+    const alpha =
+      .25 +
+      p.depth *
+      .75;
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+      x,
+      y,
+      p.size,
+      0,
+      Math.PI * 2
     );
 
+    ctx.fillStyle =
+      `rgba(90,235,255,${alpha})`;
+
+    ctx.fill();
+
+  }
+
+
   requestAnimationFrame(
-    animateBrain
+    drawBrain
   );
 
 }
 
 
-createBrainParticles();
-
-animateBrain();
-
-
-/* ============================================================
-   INICIALIZAÇÃO
-============================================================ */
-
-async function initializeJarvis() {
-
-  updateBrainPanel();
-
-
-  const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
-
-
-  if (!SpeechRecognition) {
-
-    recognitionSupported =
-      false;
-
-    setStatus(
-      "VOZ INDISPONÍVEL",
-      "O Chrome não disponibilizou reconhecimento de voz.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  recognitionSupported =
-    true;
-
-
-  /*
-    Pedimos o microfone.
-    Mesmo se essa chamada falhar,
-    ainda tentamos iniciar o SpeechRecognition.
-  */
-
-  await requestMicrophone();
-
-
-  recognition =
-    createRecognition();
-
-
-  if (!recognition) {
-    return;
-  }
-
-
-  /*
-    Primeira tentativa automática.
-  */
-
-  startRecognition();
-
-}
-
-
-/* ============================================================
-   INICIAR
-============================================================ */
-
-setTimeout(
-  () => {
-
-    initializeJarvis();
-
-  },
-  800
+window.addEventListener(
+  "resize",
+  resizeCanvas
 );
 
+resizeCanvas();
 
-/* ============================================================
-   VISIBILIDADE DA PÁGINA
-============================================================ */
+drawBrain();
+
+
+/* =========================================================
+   VISIBILIDADE
+   ========================================================= */
 
 document.addEventListener(
   "visibilitychange",
   () => {
 
     if (
-      document.visibilityState ===
-      "visible"
+      document.hidden
     ) {
 
-      if (
-        shouldListen &&
-        !speaking &&
-        !processing
-      ) {
+      stopRecognition();
 
-        setTimeout(
-          () => {
+      return;
 
-            startRecognition();
+    }
 
-          },
-          300
-        );
+    if (
+      !document.hidden &&
+      shouldListen &&
+      !processing &&
+      !speaking &&
+      !brainPanel.classList.contains("open")
+    ) {
 
-      }
+      scheduleRestart(
+        700
+      );
 
     }
 
   }
+);
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+   ========================================================= */
+
+function initializeJarvis() {
+
+  setStatus(
+    "INICIANDO",
+    "CARREGANDO NÚCLEO JARVIS"
+  );
+
+  setMic(
+    "MICROFONE: PREPARANDO"
+  );
+
+  setDiagnostic(
+    "JARVIS V3"
+  );
+
+  updateBrainUI();
+
+
+  if (!SpeechRecognition) {
+
+    setStatus(
+      "NÃO SUPORTADO",
+      "USE GOOGLE CHROME"
+    );
+
+    setMic(
+      "RECONHECIMENTO INDISPONÍVEL"
+    );
+
+    setDiagnostic(
+      "SPEECHRECOGNITION NÃO DISPONÍVEL"
+    );
+
+    return;
+
+  }
+
+
+  initializeRecognition();
+
+
+  setTimeout(
+    () => {
+
+      if (
+        shouldListen &&
+        !touchUnlocked
+      ) {
+
+        setStatus(
+          "PRONTO",
+          "TOQUE NA TELA PARA ATIVAR O MICROFONE"
+        );
+
+        setMic(
+          "MICROFONE: AGUARDANDO"
+        );
+
+        setDiagnostic(
+          "AGUARDANDO INTERAÇÃO"
+        );
+
+      }
+
+    },
+    1200
+  );
+
+
+  /*
+    Tentativa automática.
+    Alguns navegadores permitem.
+    Se o Android bloquear, o toque
+    na tela libera o reconhecimento.
+  */
+
+  setTimeout(
+    () => {
+
+      if (
+        shouldListen &&
+        !recognitionRunning &&
+        !touchUnlocked
+      ) {
+
+        startRecognition();
+
+      }
+
+    },
+    1800
+  );
+
+}
+
+
+initializeJarvis();
+
+
+/* =========================================================
+   LOG
+   ========================================================= */
+
+console.log(
+  "%cJARVIS OFFICIAL V3",
+  "color:#5eeaff;font-size:20px;font-weight:bold"
+);
+
+console.log(
+  "SpeechRecognition:",
+  !!SpeechRecognition
+);
+
+console.log(
+  "Idioma:",
+  "pt-BR"
+);
+
+console.log(
+  "Criador:",
+  OWNER_NAME
 );
 
 </script>
